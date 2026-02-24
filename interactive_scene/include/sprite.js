@@ -17,7 +17,7 @@ class SpriteManager{
   
   createSprite(){
     
-    return currentID
+    return currentID;
   }
 }
 
@@ -49,9 +49,16 @@ class Collision{
       //floor and ceiling
       for(let f = 0; f < s_m.ship_floor_list.length; f++){
         let floor_segment = s_m.ship_floor_list[f];
-        
-        if(sprite.y + sprite.sprite_texture.height - sprite.hitbox_paddingX < floor_segment.b){
-           
+        if(sprite.x + sprite.sprite_texture.height / 2 > floor_segment.b){
+          //floor
+          if(sprite.y + sprite.sprite_texture.height - sprite.hitbox_paddingX < floor_segment.b){
+            
+          }
+        }else{
+          //ceiling
+          if(sprite.y + sprite.sprite_texture.height - sprite.hitbox_paddingX < floor_segment.b){
+            
+          }
         }
       }
       //wall
