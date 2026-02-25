@@ -21,15 +21,17 @@ function playerInput(){
   //console.log("pressed")
   const input_list = [87, 65, 83, 68];
   for(let i = 0; i < input_list.length; i++){
-    if(!keyIsDown(input_list[i])){continue;}
+    if(!keyIsDown(input_list[i])){
+      continue;
+    }
     
     switch (i){
-      case 1:
-        player.x -= player.walk_speed * zoom;
-        break;
-      case 3:
-        player.x += player.walk_speed * zoom;
-        break;
+    case 1:
+      player.x -= player.walk_speed * zoom;
+      break;
+    case 3:
+      player.x += player.walk_speed * zoom;
+      break;
     }
   }
 }

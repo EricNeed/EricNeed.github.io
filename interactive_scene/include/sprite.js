@@ -22,14 +22,24 @@ class SpriteManager{
 }
 
 //***************************************************collision
+class box{
+  constructor(newX, newY, newDX, newDY){
+    this.x = newX;
+    this.y = newY;
+    this.dx = newDX;
+    this.dy = newDY;
+    this.openings = [];
+  }
+}
+
 
 class BarrierManager{
   constructor(){
     this.current_floorID = 0;
-    this.ship_floor_list = [];
-    this.ship_wall_list = [];
+    this.chamber = [];
+    this.box = [];
   }
-  add_floor(x_start, x_end, y){
+  add_chamber(x_start, x_end, y){
     ship_floor_list[this.current_floorID] = color(x_start, x_end, y);
     
     this.current_floorID += 1;
@@ -45,24 +55,20 @@ class Collision{
   tickCollision(){
     for(let s = 0; s < s_m.sprite_list.length; s++){
       let sprite = s_m.sprite_list[s];
-      
-      //floor and ceiling
-      for(let f = 0; f < s_m.ship_floor_list.length; f++){
-        let floor_segment = s_m.ship_floor_list[f];
-        if(sprite.x + sprite.sprite_texture.height / 2 > floor_segment.b){
-          //floor
-          if(sprite.y + sprite.sprite_texture.height - sprite.hitbox_paddingX < floor_segment.b){
-            
-          }
-        }else{
-          //ceiling
-          if(sprite.y + sprite.sprite_texture.height - sprite.hitbox_paddingX < floor_segment.b){
-            
-          }
+      let hitbox_left = sprite.x + sprite.hitbox_paddingX;
+      let hitbox_right = sprite.x + sprite_texture.width - sprite.hitbox_paddingX;
+      let hitbox_top = sprite.y + sprite.hitbox_paddingY;
+      let hitbox_bottom = sprite.y + sprite_texture.length - sprite.hitbox_paddingY;
+
+      //rooms
+      for(let c = 0; c < b_m.chamber.length; c++){
+        let chamber = b_m.chamber[c];
+
+        if(){
+          
         }
-      }
-      //wall
-      
+
+      }  
     }
   }
 }
