@@ -3,9 +3,9 @@ class Sprite{
     this.x = newX;
     this.y = newY;
     this.image_object = loadImage(image_dir);
-    this.hitbox_paddingX = 10;
-    this.hitbox_paddingY = 10;
-    this.walk_speed = 4;
+    this.hitbox_paddingX = 7;
+    this.hitbox_paddingY = 6;
+    this.walk_speed = 1;
   }
 }
 
@@ -16,9 +16,9 @@ class SpriteManager{
   }
   
   createSprite(x, y, image_dir){
-    this.sprite_list[this.sprite_list] = new Sprite(x, y, image_dir);
+    this.sprite_list[this.currentID] = new Sprite(x, y, image_dir);
     this.currentID += 1;
-    return currentID - 1;
+    return this.currentID - 1;
   }
 }
 
@@ -37,7 +37,7 @@ class box{
 class BarrierManager{
   constructor(){
     this.current_boxID = 0;
-    this.current_chamberID;
+    this.current_chamberID = 0;
     this.chamber = [];//player can go in but cant go out
     this.box = [];//player cannot go in, only collide with it
   }
@@ -54,25 +54,27 @@ class BarrierManager{
 }
 
 class Collision{
-  constructor(s_m, b_m){
-    this.sprite_manager = s_m;
-    this.barrier_manager = b_m;
+  constructor(s_m_temp, b_m_temp){
+    this.s_m = s_m_temp;
+    this.b_m = b_m_temp;
   }
   tickCollision(){
-    for(let s = 0; s < s_m.sprite_list.length; s++){
-      let sprite = s_m.sprite_list[s];
+    for(let s = 0; s < this.s_m.sprite_list.length; s++){
+      let sprite = this.s_m.sprite_list[s];
       let hitbox_left = sprite.x + sprite.hitbox_paddingX;
-      let hitbox_right = sprite.x + sprite_texture.width - sprite.hitbox_paddingX;
+      let hitbox_right = sprite.x + sprite.image_object.width - sprite.hitbox_paddingX;
       let hitbox_top = sprite.y + sprite.hitbox_paddingY;
-      let hitbox_bottom = sprite.y + sprite_texture.length - sprite.hitbox_paddingY;
+      let hitbox_bottom = sprite.y + sprite.image_object.height - sprite.hitbox_paddingY;
 
       //rooms
-      for(let c = 0; c < b_m.chamber.length; c++){
-        let chamber = b_m.chamber[c];
+      for(let c = 0; c < this.b_m.chamber.length; c++){
+        let chamber = this.b_m.chamber[c];
         let x_dst = chamber.x - hitbox_left;//positive if out
         let y_dst = chamber.y - hitbox_top;//positive if out
-        let dx_dst = (chamber.x + chamber.dx) - hitbox_right;//negative if out
-        let dy_dst = (chamber.y + chamber.dy) - hitbox_bottom;//negative if out
+        let dx_dst = chamber.x + chamber.dx - hitbox_right;//negative if out
+        let dy_dst = chamber.y + chamber.dy - hitbox_bottom;//negative if out
+        //console.log(`${x_dst} ${dx_dst} ${y_dst} ${dy_dst}`);
+
         if(x_dst > 0){
           sprite.x += x_dst;
         }
