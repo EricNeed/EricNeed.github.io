@@ -1,8 +1,8 @@
 class Sprite{  
-  constructor(newX, newY){
+  constructor(newX, newY, image_dir){
     this.x = newX;
     this.y = newY;
-    this.sprite_texture = loadImage('/assets/sprite.png');
+    this.image_object = loadImage(image_dir);
     this.hitbox_paddingX = 10;
     this.hitbox_paddingY = 10;
     this.walk_speed = 4;
@@ -15,9 +15,10 @@ class SpriteManager{
     this.sprite_list = [];
   }
   
-  createSprite(){
-    
-    return currentID;
+  createSprite(x, y, image_dir){
+    this.sprite_list[this.sprite_list] = new Sprite(x, y, image_dir);
+    this.currentID += 1;
+    return currentID - 1;
   }
 }
 
@@ -35,15 +36,20 @@ class box{
 
 class BarrierManager{
   constructor(){
-    this.current_floorID = 0;
-    this.chamber = [];
-    this.box = [];
+    this.current_boxID = 0;
+    this.current_chamberID;
+    this.chamber = [];//player can go in but cant go out
+    this.box = [];//player cannot go in, only collide with it
   }
-  add_chamber(x_start, x_end, y){
-    ship_floor_list[this.current_floorID] = color(x_start, x_end, y);
-    
-    this.current_floorID += 1;
-    return this.current_floorID -1;
+  addChamber(x, y, dx, dy){
+    this.chamber[this.current_chamberID] = new box(x, y, dx, dy);
+    this.current_chamberID += 1;
+    return this.current_chamberID -1;
+  }
+  addBox(x, y, dx, dy){
+    this.box[this.current_boxID] = new box(x, y, dx, dy);
+    this.current_boxID += 1;
+    return this.current_boxID -1;
   }
 }
 
@@ -63,9 +69,21 @@ class Collision{
       //rooms
       for(let c = 0; c < b_m.chamber.length; c++){
         let chamber = b_m.chamber[c];
-
-        if(){
-          
+        let x_dst = chamber.x - hitbox_left;//positive if out
+        let y_dst = chamber.y - hitbox_top;//positive if out
+        let dx_dst = (chamber.x + chamber.dx) - hitbox_right;//negative if out
+        let dy_dst = (chamber.y + chamber.dy) - hitbox_bottom;//negative if out
+        if(x_dst > 0){
+          sprite.x += x_dst;
+        }
+        if(dx_dst < 0){
+          sprite.x += dx_dst;
+        }
+        if(y_dst > 0){
+          sprite.y += y_dst;
+        }
+        if(dy_dst < 0){
+          sprite.y += dy_dst;
         }
 
       }  
