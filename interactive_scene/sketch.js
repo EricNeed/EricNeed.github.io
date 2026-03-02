@@ -6,8 +6,7 @@ let display = {
 };
 
 let ship_propertie = {
-  health : 100,
-  depth : 255,
+  health : 10,
   shipX : 0,
   VelocityX: 0,
   VelocityY: 0,
@@ -15,7 +14,7 @@ let ship_propertie = {
   shipY : 0,
   goalX : 0,
   goalY : 0,
-}
+};
 
 let playerID;//player's sprite in the sprite list
 let sprite_manager;
@@ -41,22 +40,26 @@ function setup() {
   ship_propertie.goalX = Math.floor(Math.random() * 5000);
   ship_propertie.goalX = Math.floor(Math.random() * 5000);
 
-  barrier_manager.addChamber(0, 0, 200, 200);
+  barrier_manager.addChamber(100, 150, 200, 100);
   barrier_manager.addLadder(180, 180);
-  let driver_seatID = barrier_manager.addBox(180, 170, 10,10);
-  let driver_seat = barrier_manager.box[driver_seatID]
+  let driver_seatID = barrier_manager.addBox(180, 240, 10,10);
+  let driver_seat = barrier_manager.box[driver_seatID];
   driver_seat.openings[0] = true;
   driver_seat.openings[1] = new DriverSeat();
   console.log(ship_propertie.ship_health);
 
   //terrain
-  barrier_manager.addTerrain(200, 200, 50, 50);
 }
 
 
 function draw() {
-  background(0, 0, ship_propertie.depth);
-
+  background(0, 0, 255 - ship_propertie.shipY/50);
+  if(ship_propertie.health <= 0){
+    fill(0, 0, 0);
+    textSize(10 * display.mult);
+    text("       game over \nreload to play again", 180 * display.mult, 200 * display.mult);
+    return;
+  }
   
   let player = sprite_manager.sprite_list[playerID];
   noSmooth();
@@ -65,7 +68,7 @@ function draw() {
   //render chambers
   for(let i = 0; i < barrier_manager.chamber.length; i++){
     let chamber = barrier_manager.chamber[i];
-    fill(0, 0, 0, 0)
+    fill(0, 0, 0, 0);
     rect(chamber.x * display.mult, chamber.y * display.mult, chamber.dx * display.mult, chamber.dy * display.mult);
   };
   //render ladders
@@ -82,12 +85,11 @@ function draw() {
   }
 
   //render terrain
-  for(let i = 0; i < barrier_manager.terrain.length; i++){
-    let terrain = barrier_manager.terrain[i];
+  for(let i = 0; i < map1.length; i+=4){
     fill(0);
-    let terrain_offestX = terrain.x - Math.floor(ship_propertie.shipX);//offsets to the screen's origon
-    let terrain_offestY = terrain.y - Math.floor(ship_propertie.shipY); 
-    rect(terrain_offestX * display.mult, terrain_offestY * display.mult, terrain.dx * display.mult, terrain.dy * display.mult);
+    let terrain_offestX = map1[i] - Math.floor(ship_propertie.shipX);//offsets to the screen's origon
+    let terrain_offestY = map1[i+1] - Math.floor(ship_propertie.shipY); 
+    rect(terrain_offestX * display.mult, terrain_offestY * display.mult, map1[i+2] * display.mult, map1[i+3] * display.mult);
   }
 
   playerInput();
@@ -99,9 +101,9 @@ function draw() {
   }
 
   smooth();
-  fill(0, 0, 0);
+  fill(255);
   textSize(10 * display.mult);
-  text(`Ship Health: ${ship_propertie.health} \n X: ${ship_propertie.shipX} Y: ${ship_propertie.shipY}`, (display.DEFAULT_CANVA - 80) * display.mult, 10 * display.mult);
+  text(`Ship Health: ${ship_propertie.health} \n X: ${Math.floor(ship_propertie.shipX)} Y: ${Math.floor(ship_propertie.shipY)}`, (display.DEFAULT_CANVA - 80) * display.mult, 10 * display.mult);
 }
 
 
@@ -145,13 +147,24 @@ function playerInput(){
   }
 }
 
+function mousePressed(){
+  if(typeof player.beside_functional_block === 'object'){
+    let box = player.beside_functional_block
+    if(mouseX > box.x && mouseX < box.x + box.dx && mouseY > box.y && mouseY < box.y + box.dy){
+      player.using_block = true;
+    }
+  }
+}
+
 //**********************************************************************render
 function tick_phisics(){
   let player = sprite_manager.sprite_list[playerID];
   player.y += 1;
 
-  collision.tickCollision(playerID, ship_propertie, display);
+  collision.tickCollision(playerID, ship_propertie, map1);
 }
 
-
-//**********************************************************************logic
+//**********************************************************************terrain
+let map1 = [//x, y, dx, dy
+  300, 300, 50, 50,
+];

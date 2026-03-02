@@ -47,7 +47,6 @@ class BarrierManager{
     this.chamber = [];//player can go in but cant go out
     this.box = [];//player cannot go in, only collide with it
     this.ladder = [];
-    this.terrain = [];//the stuff ship take damage from
   }
   addChamber(x, y, dx, dy){
     let current_index = this.chamber.length;
@@ -65,17 +64,17 @@ class BarrierManager{
     this.ladder[current_index].image_object = loadImage("assets/ladder.png");
     return current_index;
   }
-  addTerrain(x, y, dx, dy){
-    let current_index = this.terrain.length;
-    this.terrain[current_index] = new box(x, y, dx, dy);
-    return current_index;
-  }
+  // addTerrain(x, y, dx, dy){
+  //   let current_index = this.terrain.length;
+  //   this.terrain[current_index] = new box(x, y, dx, dy);
+  //   return current_index;
+  // }
 }
 
 //script for what happens if player interact with those blocks
 class DriverSeat{
   working(display_mult, ship_propertie){
-    fill(0);
+    fill(255);
     textSize(7 * display.mult);
     smooth();
     text(`X Velocity: ${ship_propertie.VelocityX} \nY Velocity: ${ship_propertie.VelocityY}`, (display.DEFAULT_CANVA - 80) * display.mult, 40 * display.mult)
@@ -122,7 +121,7 @@ class Collision{
     return [x_dst, y_dst, dx_dst, dy_dst];
   }
 
-  tickCollision(playerID, ship_propertie, display){
+  tickCollision(playerID, ship_propertie, map){
     for(let s = 0; s < this.s_m.sprite_list.length; s++){
       let sprite = this.s_m.sprite_list[s];
       let hitbox_dx = sprite.image_object.width - sprite.hitbox_paddingX*2;
@@ -151,7 +150,7 @@ class Collision{
         let chamber = this.b_m.chamber[c];
 
         //if is indoor, check if is in the chambers, if outdoor, check if hit the chambers
-        if(sprite.is_indoor){
+        if(sprite.is_indoor && centerX > chamber.x && centerX < chamber.x + chamber.dx && centerY > chamber.y && centerY < chamber.y + chamber.dy){
           let result = this.checkDist(hitbox_left, hitbox_top, hitbox_right, hitbox_bottom, chamber.x, chamber.y, chamber.x + chamber.dx, chamber.y + chamber.dy);
           //console.log(`${x_dst} ${dx_dst} ${y_dst} ${dy_dst}`);
 
@@ -192,26 +191,23 @@ class Collision{
     }
 
     //ship colliding with terrain
-    if(true){
-      for(let t = 0; t < this.b_m.terrain.length; t++){
-        let terrain = this.b_m.terrain[t];
-        let terrain_offestX = terrain.x - Math.floor(ship_propertie.shipX);//offsets to the screen's origon
-        let terrain_offestY = terrain.y - Math.floor(ship_propertie.shipY);
-        let terrain_right = terrain_offestX + terrain.dx;
-        let terrain_bottom = terrain_offestY + terrain.dy;
+    for(let t = 0; t < map.length; t+=4){
+      let terrain_offestX = map[t] - Math.floor(ship_propertie.shipX);//offsets to the screen's origon
+      let terrain_offestY = map[t+1] - Math.floor(ship_propertie.shipY);
+      let terrain_right = terrain_offestX + map[t+2];
+      let terrain_bottom = terrain_offestY + map[t+3];
 
-        for(let c = 0; c < this.b_m.chamber.length; c++){
-          let chamber = this.b_m.chamber[c];
-          let result = this.checkDist(chamber.x + chamber.dx, chamber.y + chamber.dy, chamber.x, chamber.y, terrain_offestX, terrain_offestY, terrain_right, terrain_bottom);
-          if(result[0] < 0 && result[1] < 0 && result[2] > 0 && result[3] > 0){
-            console.log("colliding with terrain");
-            ship_propertie.shipHit = true;
-            ship_propertie.health -= 1 * Math.ceil(ship_propertie.VelocityX + ship_propertie.VelocityY) * 10;
-            ship_propertie.VelocityX = -1 * ship_propertie.VelocityX * 1.5;//if hit a terrain, then bounce the ship and make it go the opposite direction with slower speed
-            ship_propertie.VelocityY = -1 * ship_propertie.VelocityY * 1.5;
-          }
-        } 
-      }       
+      for(let c = 0; c < this.b_m.chamber.length; c++){
+        let chamber = this.b_m.chamber[c];
+        let result = this.checkDist(chamber.x + chamber.dx, chamber.y + chamber.dy, chamber.x, chamber.y, terrain_offestX, terrain_offestY, terrain_right, terrain_bottom);
+        if(result[0] < 0 && result[1] < 0 && result[2] > 0 && result[3] > 0){
+          console.log("colliding with terrain");
+          ship_propertie.shipHit = true;
+          ship_propertie.health -= 1 * Math.ceil(ship_propertie.VelocityX + ship_propertie.VelocityY) * 10;
+          ship_propertie.VelocityX = -1 * ship_propertie.VelocityX * 1.5;//if hit a terrain, then bounce the ship and make it go the opposite direction with slower speed
+          ship_propertie.VelocityY = -1 * ship_propertie.VelocityY * 1.5;
+        }
+      } 
     }
   }
 }
