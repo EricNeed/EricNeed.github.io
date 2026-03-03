@@ -6,3 +6,44 @@ html, body {
 canvas {
   display: block;
 }
+
+body {
+  display: flex;
+  background-color: #464646;
+  /* flex-flow: row-reverse; */
+}
+
+#sketch-container {
+  position: relative;
+  order: 1;
+}
+
+#discription {
+  /* flex: 1; */
+  width: 35vh;
+  background-color: #636363;
+  border-style: solid;
+  border-color: rgb(59, 59, 59);
+  padding: 0.5vh;
+  margin: 1.5vh;
+  order: 2;
+  font-size: 2vh;
+  & h1 {
+    font-size: 4vh;
+  }
+}
+
+#ad{
+  flex: 1;
+  background-color: #636363;
+  border-style: solid;
+  border-color: rgb(59, 59, 59);
+  padding: 0.5vh;
+  margin: 1.5vh;
+  order: 2;
+  & h1 {
+    padding-left: 15%;
+    padding-top: 50%;
+    font-size: 4vh;
+  }
+}

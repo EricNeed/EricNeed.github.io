@@ -114,11 +114,26 @@ class Collision{
 
   //give the feed back of how much 1 is suppose to move from 2 if its in a chamber.
   checkDist(x1, y1, endx1, endy1, x2, y2, endx2, endy2){
-    let x_dst = x2 - x1;//positive if out
-    let y_dst = y2 - y1;//positive if out
-    let dx_dst = endx2 - endx1;//negative if out
-    let dy_dst = endy2 - endy1;//negative if out
+    let x_dst = x2 - x1;//positive if out, left
+    let y_dst = y2 - y1;//positive if out, top
+    let dx_dst = endx2 - endx1;//negative if out, right
+    let dy_dst = endy2 - endy1;//negative if out, bottom
     return [x_dst, y_dst, dx_dst, dy_dst];
+  }
+
+  checkOpening(spriteL, spriteR, spriteU, spriteB, openings, wall_side){
+    for(let i = 0; i < openings.length; i += 3){//opening: 1:side(which wall) 2:x or y 4:dist to x or y(depend on the orientation)
+      if(wall_side != openings[i]){//0:left wall, 1: top wall, 2: right wall, 3: bottom wall
+        continue;
+      }
+      if((openings[i] == 0 || openings[i] == 2) && openings[i+1] < spriteU && openings[i+1] + openings[i+2] > spriteB){
+        return true;
+      }
+      if((openings[i] == 1 || openings[i] == 3) && openings[i+1] < spriteL && openings[i+1] + openings[i+2] > spriteR){
+        return true;
+      }
+    }
+    return false;
   }
 
   tickCollision(playerID, ship_propertie, map){
@@ -155,16 +170,21 @@ class Collision{
           //console.log(`${x_dst} ${dx_dst} ${y_dst} ${dy_dst}`);
 
           if(result[0] > 0){
+            if(this.checkOpening(hitbox_left, hitbox_right, hitbox_top, hitbox_bottom, chamber.openings, 0)) continue;
             sprite.x += result[0];
           }
           if(result[2] < 0){
+            if(this.checkOpening(hitbox_left, hitbox_right, hitbox_top, hitbox_bottom, chamber.openings, 2)) continue;
             sprite.x += result[2];
           }
           if(result[1] > 0){
+            if(this.checkOpening(hitbox_left, hitbox_right, hitbox_top, hitbox_bottom, chamber.openings, 1)) continue;
             sprite.y += result[1];
           }
           if(result[3] < 0){
-            sprite.y += result[3];
+            if(!this.checkOpening(hitbox_left, hitbox_right, hitbox_top, hitbox_bottom, chamber.openings, 3)){
+              sprite.y += result[3];
+            };
           }
         }else{
           //let result = this.checkDist(chamber.x, chamber.y, chamber.x + chamber.dx, chamber.y + chamber.dy);
@@ -203,11 +223,88 @@ class Collision{
         if(result[0] < 0 && result[1] < 0 && result[2] > 0 && result[3] > 0){
           console.log("colliding with terrain");
           ship_propertie.shipHit = true;
-          ship_propertie.health -= 1 * Math.ceil(ship_propertie.VelocityX + ship_propertie.VelocityY) * 10;
+          ship_propertie.health -= 1 * Math.ceil(Math.abs(ship_propertie.VelocityX) + Math.abs(ship_propertie.VelocityY)) * 10;
           ship_propertie.VelocityX = -1 * ship_propertie.VelocityX * 1.5;//if hit a terrain, then bounce the ship and make it go the opposite direction with slower speed
           ship_propertie.VelocityY = -1 * ship_propertie.VelocityY * 1.5;
+          break;
         }
       } 
     }
   }
 }
+
+//*******************************************editor mode */
+class Editor{
+  constructor(canvasLength){
+    this.convert_canvas = 400 / canvasLength;
+    this.multiplier = 10 * this.convert_canvas;
+    this.Result = [];
+    this.canvas_length = canvasLength;
+    this.drawing_rn = false;
+    this.startx;
+    this.starty;
+    this.shipOffsetX = Math.floor(canvasLength * 0.10);
+    this.shipOffsetY = Math.floor(canvasLength * 0.10);
+    this.finished = false;
+  }
+  tickEditor(){
+    let button_length = Math.floor(this.canvas_length * 0.05);
+    rect(0,0,button_length, button_length);
+    rect(button_length, 0, button_length, button_length)
+    textSize(0.02 * this.canvas_length)
+    fill(0);
+    text("undo  use    check console for changes", 0, button_length/2);
+
+    for(let i = 0; i < this.Result.length; i+=4){
+      rect(this.Result[i], this.Result[i+1], this.Result[i+2], this.Result[i+3]);
+    }
+    if(this.drawing_rn){
+      rect(this.startx, this.starty, mouseX - this.startx, mouseY - this.starty);
+    }
+
+    textSize(0.01 * this.canvas_length)
+    text("your ship", this.shipOffsetX, this.shipOffsetY - 10);
+    rect(this.shipOffsetX, this.shipOffsetY, 40, 20);
+  }
+  mousePressedInput(){//mouse pressed should triger this
+    let button_length = Math.floor(this.canvas_length * 0.05);
+    if(this.drawing_rn){//save changes
+      this.drawing_rn = false;
+      let new_vec = this.Result.length;
+      this.Result[new_vec] = this.startx;
+      this.Result[new_vec+1] = this.starty;
+      this.Result[new_vec+2] = mouseX - this.startx;
+      this.Result[new_vec+3] = mouseY - this.starty;
+      console.log(`${this.Result[new_vec]} ${this.Result[new_vec+1]} ${this.Result[new_vec+2]} ${this.Result[new_vec+3]}`);
+
+    }else if(mouseX < button_length && mouseY < button_length){//undo button
+      this.Result.pop();
+      this.Result.pop();
+      this.Result.pop();
+      this.Result.pop();
+      console.log("undo");
+    }else if(mouseX > button_length && mouseX < button_length*2 && mouseY < button_length){//use button
+      console.log("let x = [")
+      for(let i = 0; i < this.Result.length; i+=4){//convert it to size in the world
+        this.Result[i] = Math.floor(this.multiplier * (this.Result[i] - this.shipOffsetX*0.7));
+        this.Result[i+1] = Math.floor(this.multiplier * (this.Result[i+1] - this.shipOffsetY * 0.5));
+        this.Result[i+2] = Math.floor(this.multiplier * this.Result[i+2]);
+        this.Result[i+3] = Math.floor(this.multiplier * this.Result[i+3]);
+        console.log(`${this.Result[i]}, ${this.Result[i+1]}, ${this.Result[i+2]}, ${this.Result[i+3]},`)
+        this.finished = true;
+      }
+      console.log("]");
+    }else{
+      this.startx = mouseX;
+      this.starty = mouseY;
+      this.drawing_rn = true;
+    }
+  }
+}
+
+// this.drawing_rn = false;
+//       let new_vec = this.Result.length;
+//       this.Result[new_vec] = Math.floor(this.startx * this.multiplier);
+//       this.Result[new_vec+1] = Math.floor(this.starty * this.multiplier);
+//       this.Result[new_vec+2] = Math.floor((mouseX - this.startx) * this.multiplier);
+//       this.Result[new_vec+3] = Math.floor((mouseY - this.starty) * this.multiplier);

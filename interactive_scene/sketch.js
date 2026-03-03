@@ -1,3 +1,6 @@
+//change editor to m
+//add more discription on pilot ship
+
 let display = {
   DEFAULT_CANVA : 400,
   display_multiplier : 1,
@@ -6,7 +9,7 @@ let display = {
 };
 
 let ship_propertie = {
-  health : 10,
+  health : 50,
   shipX : 0,
   VelocityX: 0,
   VelocityY: 0,
@@ -20,7 +23,8 @@ let playerID;//player's sprite in the sprite list
 let sprite_manager;
 let barrier_manager;
 let collision;
-
+let editor_mode = false;
+let editor;
 
 function setup() {
   //display setup
@@ -31,19 +35,25 @@ function setup() {
 
 
   sprite_manager = new SpriteManager();
-  playerID = sprite_manager.createSprite(20, 20, "assets/sprite.png");
   barrier_manager = new BarrierManager();
   collision = new Collision(sprite_manager, barrier_manager);
 
-  //submarine
-  //choose a random coordinate as goal
-  ship_propertie.goalX = Math.floor(Math.random() * 5000);
-  ship_propertie.goalX = Math.floor(Math.random() * 5000);
-
-  barrier_manager.addChamber(100, 150, 200, 100);
-  barrier_manager.addLadder(180, 180);
-  let driver_seatID = barrier_manager.addBox(180, 240, 10,10);
+  let driver_seatID = barrier_manager.addBox(250, 190, 10,10);
   let driver_seat = barrier_manager.box[driver_seatID];
+  playerID = sprite_manager.createSprite(driver_seat.x, driver_seat.y -10, "assets/sprite.png");
+
+  //submarine
+
+  let chamber = barrier_manager.chamber[barrier_manager.addChamber(100, 150, 200, 50)];
+  chamber.openings = [3, 175, 20];
+  chamber = barrier_manager.chamber[barrier_manager.addChamber(100, 200, 200, 50)];
+  chamber.openings = [1, 175, 20];
+
+  barrier_manager.addLadder(180, 230);
+  barrier_manager.addLadder(180, 215);
+  barrier_manager.addLadder(180, 200);
+  barrier_manager.addLadder(180, 185);
+
   driver_seat.openings[0] = true;
   driver_seat.openings[1] = new DriverSeat();
   console.log(ship_propertie.ship_health);
@@ -53,7 +63,17 @@ function setup() {
 
 
 function draw() {
-  background(0, 0, 255 - ship_propertie.shipY/50);
+  background(0, 0, 255 - ship_propertie.shipY/25);
+
+  if(editor_mode){
+    editor.tickEditor();
+    if(editor.finished){
+      map1 = editor.Result;
+      editor_mode = false;
+    }
+    return;
+  }
+
   if(ship_propertie.health <= 0){
     fill(0, 0, 0);
     textSize(10 * display.mult);
@@ -63,12 +83,13 @@ function draw() {
   
   let player = sprite_manager.sprite_list[playerID];
   noSmooth();
-  image(player.image_object, player.x * display.mult, player.y * display.mult, player.image_object.width * display.mult, player.image_object.height * display.mult);
 
   //render chambers
   for(let i = 0; i < barrier_manager.chamber.length; i++){
     let chamber = barrier_manager.chamber[i];
-    fill(0, 0, 0, 0);
+    strokeWeight(4);
+    stroke(0);
+    fill(25, 75, 27);
     rect(chamber.x * display.mult, chamber.y * display.mult, chamber.dx * display.mult, chamber.dy * display.mult);
   };
   //render ladders
@@ -80,17 +101,21 @@ function draw() {
   //box and functional stations
   for(let i = 0; i < barrier_manager.box.length; i++){
     let box = barrier_manager.box[i];
+    strokeWeight(1);
     fill(150);
     rect(box.x * display.mult, box.y * display.mult, box.dx * display.mult, box.dy * display.mult);
   }
 
   //render terrain
   for(let i = 0; i < map1.length; i+=4){
+    stroke(255);
     fill(0);
     let terrain_offestX = map1[i] - Math.floor(ship_propertie.shipX);//offsets to the screen's origon
     let terrain_offestY = map1[i+1] - Math.floor(ship_propertie.shipY); 
     rect(terrain_offestX * display.mult, terrain_offestY * display.mult, map1[i+2] * display.mult, map1[i+3] * display.mult);
   }
+
+  image(player.image_object, player.x * display.mult, player.y * display.mult, player.image_object.width * display.mult, player.image_object.height * display.mult);
 
   playerInput();
   tick_phisics();
@@ -110,6 +135,7 @@ function draw() {
 //**********************************************************************input
 function playerInput(){
   //console.log("pressed")
+
   let player = sprite_manager.sprite_list[playerID];
 
   if(keyIsDown(82)){
@@ -140,19 +166,26 @@ function playerInput(){
       break;
     case 4:
       console.log("press E");
-      if(typeof player.beside_functional_block === 'object'){
-        player.using_block = player.beside_functional_block.openings[0];
-      }
+      // if(typeof player.beside_functional_block === 'object'){
+      //   player.using_block = player.beside_functional_block.openings[0];
+      // }
+      editor_mode = true;
+      editor = new Editor(windowWidth < windowHeight? windowWidth : windowHeight);
     }
   }
 }
 
 function mousePressed(){
-  if(typeof player.beside_functional_block === 'object'){
-    let box = player.beside_functional_block
-    if(mouseX > box.x && mouseX < box.x + box.dx && mouseY > box.y && mouseY < box.y + box.dy){
-      player.using_block = true;
-    }
+  if(editor_mode){
+    editor.mousePressedInput();
+  }
+
+  let player = sprite_manager.sprite_list[playerID]
+  let box = player.beside_functional_block;
+  let mouseX_scaled = mouseX / display.mult;
+  let mouseY_scaled = mouseY / display.mult;
+  if(typeof player.beside_functional_block === 'object' && mouseX_scaled > box.x && mouseX_scaled < box.x + box.dx && mouseY_scaled > box.y && mouseY_scaled < box.y + box.dy){
+    player.using_block = !player.using_block;
   }
 }
 
@@ -166,5 +199,9 @@ function tick_phisics(){
 
 //**********************************************************************terrain
 let map1 = [//x, y, dx, dy
-  300, 300, 50, 50,
+  300, 300, 3000, 400,
+  -5000, 300, 5000, 1000,
+  400, 700, 1000, 200,
+  -100, 1300, 1000, 300
+
 ];
