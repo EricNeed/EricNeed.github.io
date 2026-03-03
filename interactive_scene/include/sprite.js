@@ -235,24 +235,23 @@ class Collision{
 
 //*******************************************editor mode */
 class Editor{
-  constructor(canvasLength){
-    this.convert_canvas = 400 / canvasLength;
-    this.multiplier = 10 * this.convert_canvas;
+  constructor(canvasLength, goal){
+    this.multiplier = goal / canvasLength;
     this.Result = [];
     this.canvas_length = canvasLength;
     this.drawing_rn = false;
     this.startx;
     this.starty;
-    this.shipOffsetX = Math.floor(canvasLength * 0.10);
-    this.shipOffsetY = Math.floor(canvasLength * 0.10);
+    this.shipOffsetX = Math.floor(300 / this.multiplier);
+    this.shipOffsetY = Math.floor(300 / this.multiplier);
     this.finished = false;
   }
   tickEditor(){
+    fill(0);
     let button_length = Math.floor(this.canvas_length * 0.05);
     rect(0,0,button_length, button_length);
     rect(button_length, 0, button_length, button_length)
     textSize(0.02 * this.canvas_length)
-    fill(0);
     text("undo  use    check console for changes", 0, button_length/2);
 
     for(let i = 0; i < this.Result.length; i+=4){
@@ -264,7 +263,10 @@ class Editor{
 
     textSize(0.01 * this.canvas_length)
     text("your ship", this.shipOffsetX, this.shipOffsetY - 10);
-    rect(this.shipOffsetX, this.shipOffsetY, 40, 20);
+    rect(this.shipOffsetX, this.shipOffsetY, 200 / this.multiplier, 100 / this.multiplier);
+    text("goal here", this.canvas_length *0.96, this.canvas_length * 0.95);
+    fill(0, 255, 0);
+    rect(this.canvas_length * 0.96, this.canvas_length * 0.96, this.canvas_length, this.canvas_length);
   }
   mousePressedInput(){//mouse pressed should triger this
     let button_length = Math.floor(this.canvas_length * 0.05);
@@ -284,16 +286,15 @@ class Editor{
       this.Result.pop();
       console.log("undo");
     }else if(mouseX > button_length && mouseX < button_length*2 && mouseY < button_length){//use button
-      console.log("let x = [")
       for(let i = 0; i < this.Result.length; i+=4){//convert it to size in the world
         this.Result[i] = Math.floor(this.multiplier * (this.Result[i] - this.shipOffsetX*0.7));
         this.Result[i+1] = Math.floor(this.multiplier * (this.Result[i+1] - this.shipOffsetY * 0.5));
         this.Result[i+2] = Math.floor(this.multiplier * this.Result[i+2]);
         this.Result[i+3] = Math.floor(this.multiplier * this.Result[i+3]);
-        console.log(`${this.Result[i]}, ${this.Result[i+1]}, ${this.Result[i+2]}, ${this.Result[i+3]},`)
+        // console.log(`${this.Result[i]}, ${this.Result[i+1]}, ${this.Result[i+2]}, ${this.Result[i+3]},`)
         this.finished = true;
       }
-      console.log("]");
+      console.log(this.Result);
     }else{
       this.startx = mouseX;
       this.starty = mouseY;

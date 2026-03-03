@@ -15,8 +15,7 @@ let ship_propertie = {
   VelocityY: 0,
   shipHit : false,
   shipY : 0,
-  goalX : 5000,
-  goalY : 5000,
+  goal : 5000,//x : 5000 y: 5000
 };
 
 let playerID;//player's sprite in the sprite list
@@ -25,6 +24,7 @@ let barrier_manager;
 let collision;
 let editor_mode = false;
 let editor;
+let won = false;
 
 function setup() {
   //display setup
@@ -79,6 +79,10 @@ function draw() {
     textSize(10 * display.mult);
     text("       game over \nreload to play again", 180 * display.mult, 200 * display.mult);
     return;
+  }else if(won){
+    fill(0, 0, 0);
+    textSize(10 * display.mult);
+    text("    you won \nreload to play again", 180 * display.mult, 200 * display.mult);
   }
   
   let player = sprite_manager.sprite_list[playerID];
@@ -125,16 +129,16 @@ function draw() {
     player.beside_functional_block.openings[1].working(display.mult, ship_propertie);
   }
 
-  console.log(Math.hypot(ship_propertie.goalX - ship_propertie.shipX, ship_propertie.goalY - ship_propertie.shipY));
-  if(Math.hypot(ship_propertie.goalX - ship_propertie.shipX, ship_propertie.goalY - ship_propertie.shipY) < 100){
+  if(Math.hypot(ship_propertie.goalX - ship_propertie.shipX, ship_propertie.goalX - ship_propertie.shipY) < 100){
     console.log("goal reached");
+    won = true;
   }
 
   smooth();
   fill(255);
   textSize(10 * display.mult);
   text(`Ship Health: ${ship_propertie.health} \n X: ${Math.floor(ship_propertie.shipX)} Y: ${Math.floor(ship_propertie.shipY)}`, (display.DEFAULT_CANVA - 80) * display.mult, 10 * display.mult);
-  text(`goal: (${ship_propertie.goalX}, ${ship_propertie.goalY})`, 0, 10 * display.mult);
+  text(`goal: (${ship_propertie.goalX}, ${ship_propertie.goalX})`, 0, 10 * display.mult);
 }
 
 
@@ -178,7 +182,7 @@ function playerInput(){
       break;
     case 5:
       editor_mode = true;
-      editor = new Editor(windowWidth < windowHeight? windowWidth : windowHeight);
+      editor = new Editor(windowWidth < windowHeight? windowWidth : windowHeight, ship_propertie.goal);
       break;
     }
   }
@@ -207,10 +211,68 @@ function tick_phisics(){
 }
 
 //**********************************************************************terrain
-let map1 = [//x, y, dx, dy
-  300, 300, 3000, 400,
-  -5000, 300, 5000, 1000,
-  400, 700, 1000, 200,
-  -100, 1300, 1000, 300
+// let map1 = [//x, y, dx, dy
+//   300, 300, 3000, 400,
+//   -5000, 300, 5000, 1000,
+//   400, 700, 1000, 200,
+//   -100, 1300, 1000, 300
 
-];
+// ];
+
+
+let map1 = [-128,
+348,
+158,
+3328,
+352,
+390 ,
+100 ,
+200,
+246 ,
+611,
+126,
+247,
+294,
+875,
+168 ,
+337,
+368, 
+1218,
+142 ,
+305,
+46,
+1513,
+31,
+580 ,
+51 ,
+2099,
+880 ,
+263,
+515,
+1450,
+1081,
+437 ,
+953 ,
+2252,
+1112,
+232 ,
+1655,
+1830,
+1613,
+121,
+2773,
+1956 ,
+247,
+938 ,
+2119,
+2526,
+295,
+1118,
+2077 ,
+2389,
+268,
+131,
+2862,
+2895,
+242,
+981,]
