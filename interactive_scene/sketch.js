@@ -15,8 +15,8 @@ let ship_propertie = {
   VelocityY: 0,
   shipHit : false,
   shipY : 0,
-  goalX : 0,
-  goalY : 0,
+  goalX : 5000,
+  goalY : 5000,
 };
 
 let playerID;//player's sprite in the sprite list
@@ -102,7 +102,7 @@ function draw() {
   for(let i = 0; i < barrier_manager.box.length; i++){
     let box = barrier_manager.box[i];
     strokeWeight(1);
-    fill(150);
+    fill(!player.using_block * 255, player.using_block * 255, 0);
     rect(box.x * display.mult, box.y * display.mult, box.dx * display.mult, box.dy * display.mult);
   }
 
@@ -125,10 +125,16 @@ function draw() {
     player.beside_functional_block.openings[1].working(display.mult, ship_propertie);
   }
 
+  console.log(Math.hypot(ship_propertie.goalX - ship_propertie.shipX, ship_propertie.goalY - ship_propertie.shipY));
+  if(Math.hypot(ship_propertie.goalX - ship_propertie.shipX, ship_propertie.goalY - ship_propertie.shipY) < 100){
+    console.log("goal reached");
+  }
+
   smooth();
   fill(255);
   textSize(10 * display.mult);
   text(`Ship Health: ${ship_propertie.health} \n X: ${Math.floor(ship_propertie.shipX)} Y: ${Math.floor(ship_propertie.shipY)}`, (display.DEFAULT_CANVA - 80) * display.mult, 10 * display.mult);
+  text(`goal: (${ship_propertie.goalX}, ${ship_propertie.goalY})`, 0, 10 * display.mult);
 }
 
 
@@ -146,7 +152,7 @@ function playerInput(){
     return;
   }
 
-  const input_list = [87, 65, 83, 68, 69];
+  const input_list = [87, 65, 83, 68, 69, 77];
   player.is_climbing = false;
   
   for(let i = 0; i < input_list.length; i++){
@@ -166,11 +172,14 @@ function playerInput(){
       break;
     case 4:
       console.log("press E");
-      // if(typeof player.beside_functional_block === 'object'){
-      //   player.using_block = player.beside_functional_block.openings[0];
-      // }
+      if(typeof player.beside_functional_block === 'object'){
+        player.using_block = player.beside_functional_block.openings[0];
+      }
+      break;
+    case 5:
       editor_mode = true;
       editor = new Editor(windowWidth < windowHeight? windowWidth : windowHeight);
+      break;
     }
   }
 }
