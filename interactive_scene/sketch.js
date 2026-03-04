@@ -138,7 +138,7 @@ function draw() {
   fill(255);
   textSize(10 * display.mult);
   text(`Ship Health: ${ship_propertie.health} \n X: ${Math.floor(ship_propertie.shipX)} Y: ${Math.floor(ship_propertie.shipY)}`, (display.DEFAULT_CANVA - 80) * display.mult, 10 * display.mult);
-  text(`goal: (${ship_propertie.goalX}, ${ship_propertie.goalX})`, 0, 10 * display.mult);
+  text(`goal: (${ship_propertie.goal}, ${ship_propertie.goal})`, 0, 10 * display.mult);
 }
 
 
