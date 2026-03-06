@@ -7,3 +7,4 @@
 
 ## Assignment
 - add assignment here
+- [Arrays and Object Notation](array_project)
