@@ -1,33 +1,60 @@
-let part = {
-    x: 0,
-    y: 0,
-    z: 0,
-    type: 0, //0: box, 1: cylinder, 2
-};
+let part = [0,1,1,1,1,1,1,1,1,0];//0: part type, 1: is can collide 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
 
 let character_list = [0];
 
 //different type of plane
 let plane_constrcts = [//the first 1 index of each is the primary part
-    //1: x offset, 2: y offset, 3: z offset, 4: yawn, 5: pitch, 6:roll, 7: x dimention/radius, 8: y dimention/height, 9:z_dimention 
+    //0: part type, 1: is movable part 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
     [0,0,0,0],//0 default
     [0,0,0,0],//fast plane
     [0,0,0,0],
 ];
 
-class character{
+class Character{
     constructor(primary_x, primary_y, primary_z, __type){
-        this.characterID = character_list[0];
         character_list[0]++;
-        this.primary_parts = structuredClone(part);
-        this.primary_parts.x = primary_x;
-        this.primary_parts.y = primary_y;
-        this.primary_parts.z = primary_z;
+        this.characterID = character_list[0];
+        this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, 0,0,0];
         this.moving_parts = [];
-        character_list.push(this);
+        character_list[this.characterID] = this;
+        return this.characterID;
     }
 }
 
-class user{
+//****************************************************************************************************************user logic */
 
+class User{
+    constructor(__ID){
+        this.characterID = __ID;
+    }
+
+    userKeyInput(){
+        let plane = character_list[this.characterID];
+        const input_list = [87, 65, 83, 68, 69, 77];
+        
+        for(let i = 0; i < input_list.length; i++){
+            if(!keyIsDown(input_list[i])){
+            continue;
+            }
+            //input
+            switch (i){
+            case 0://forward
+                plane.characterID;
+                break;
+            case 1://left
+                break;
+            case 2://down
+
+            case 3://right
+                break;
+            case 4:
+                console.log("press E");
+                break;
+            }
+        }
+    }
+
+    tickUser(){
+        this.userKeyInput();
+    }
 }
