@@ -1,6 +1,5 @@
 let user_logic;
 let characterID;
-let camera = [0, 0, 0]; //lookX, lookY, lookZ
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -21,6 +20,7 @@ function draw() {
   }
 
   orbitControl();
+  
 
   //plane(10000, 10000);
 
@@ -38,5 +38,16 @@ function draw_shape(part){
   switch(part[0]){
     case 0://box
       box(part[5], part[6], part[7]);
+  }
+}
+
+function mousePressed(){
+  user_logic.mouseClick();
+}
+
+function mouseReleased(){
+  if(user_logic.pointerLockOn){
+    exitPointerLock();
+    user_logic.pointerLockOn = false;
   }
 }

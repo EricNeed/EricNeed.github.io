@@ -16,6 +16,7 @@ class Character{
         this.characterID = character_list[0];
         this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, 0,0,0];
         this.moving_parts = [];
+        this.allow_pitch = false;//allow the plane front to lean downward, not looks nice on some planes
         character_list[this.characterID] = this;
         return this.characterID;
     }
@@ -26,6 +27,9 @@ class Character{
 class User{
     constructor(__ID){
         this.characterID = __ID;
+        this.pointerLockOn = false;
+        this.sensitivity = 1;
+        this.camera_angle = [0, 0, 0]; //Yawn, Pitch, Roll
     }
 
     userKeyInput(){
@@ -54,7 +58,28 @@ class User{
         }
     }
 
+    //change fov angle
+    userMouseInput(){
+        if(this.pointerLockOn){
+
+        }
+    }
+
     tickUser(){
         this.userKeyInput();
+        this.userMouseInput();
+        console.log(movedX + "" + movedY);
+        
+        camera(0, 800, 0, this.camera_angle[0], this,this.camera_angle[1], this.camera_angle[0], this,this.camera_angle[1]);
+    }
+
+    mouseClick(){
+        if(mouseButton === LEFT){
+            console.log("left clicked");
+        }
+        if(mouseButton === RIGHT){
+            this.pointerLockOn = true;
+            requestPointerLock();
+        }
     }
 }
