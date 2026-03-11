@@ -1,17 +1,20 @@
 let user_logic;
 let characterID;
+let camera = [0, 0, 0]; //lookX, lookY, lookZ
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  characterID = new Character(0,0,0);
+  let character = new Character(0,0,0);
+  characterID = character.characterID;
   user_logic = new User(characterID);
 }
 
 function draw() {
   background(220);
 
+  console.log(camera.y);
+
   //render character
-  console.log(character_list.length);
   for(let c = 1; c<character_list.length; c++){//the first index is the current id, skip it
     let chara = character_list[c];
     draw_shape(chara.primary_parts);

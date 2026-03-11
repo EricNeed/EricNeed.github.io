@@ -39,7 +39,7 @@ class User{
             //input
             switch (i){
             case 0://forward
-                plane.characterID;
+                plane.primary_parts[2]++;
                 break;
             case 1://left
                 break;
