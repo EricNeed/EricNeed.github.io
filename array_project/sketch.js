@@ -21,11 +21,11 @@ function draw() {
     draw_shape(chara.primary_parts);
   }
 
-  orbitControl();
+  //orbitControl();
   
   draw_3d.draw_3d();
 
-  //plane(768 * 8, 768 * 8);
+  // plane(768 * 8, 768 * 8);
 
   //translate(0, 0, 0);
   //box(100, 100);
@@ -36,12 +36,17 @@ function draw() {
 
 //0: part type, 1: is movable part 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
 function draw_shape(part){
+  push();
   translate(part[2], part[3], part[4]);
+  rotateX(part[10]);
+  rotateY(part[9]);
+  rotateZ(part[8]);
 
   switch(part[0]){
     case 0://box
       box(part[5], part[6], part[7]);
   }
+  pop();
 }
 
 function mousePressed(){

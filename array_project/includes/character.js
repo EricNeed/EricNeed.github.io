@@ -16,7 +16,10 @@ class Character{
         this.characterID = character_list[0];
         this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, 0,0,0];
         this.moving_parts = [];
-        this.allow_pitch = false;//allow the plane front to lean downward, not looks nice on some planes
+
+        this.x_sync_primary = false;//the plane tilt down when look down
+        this.y_sync_primary = true;//the plane look at the direction pointing at
+
         character_list[this.characterID] = this;
         return this.characterID;
     }
@@ -29,7 +32,8 @@ class User{
         this.characterID = __ID;
         this.pointerLockOn = false;
         this.sensitivity = 1;
-        this.camera_angle = [0, 0, 0]; //Yawn, Pitch, Roll
+        this.zoom = 1000;
+        this.camera_angle = {x: 0, y: 0};
     }
 
     userKeyInput(){
@@ -58,19 +62,30 @@ class User{
         }
     }
 
+    move_camera(){
+        let player = character_list[this.characterID];
+
+        let x = player.primary_parts[2] + this.zoom * sin(this.camera_angle.x) * cos(this.camera_angle.y);
+        let y = player.primary_parts[3] + this.zoom * sin(this.camera_angle.x) * sin(this.camera_angle.y);
+        let z = player.primary_parts[4] + this.zoom * cos(this.camera_angle.x);
+
+        camera(x, y, z, player.primary_parts[2], player.primary_parts[3], player.primary_parts[4]);
+    }
+
     //change fov angle
     userMouseInput(){
+        let plane = character_list[this.characterID];
         if(this.pointerLockOn){
-
+            console.log(movedX + " " + movedY);
+            this.camera_angle.y += movedY * 0.01;
+            this.camera_angle.x += movedX * 0.005;
         }
     }
 
     tickUser(){
         this.userKeyInput();
         this.userMouseInput();
-        //console.log(movedX + "" + movedY);
-        
-        //camera(0, 800, 0, this.camera_angle[0], this,this.camera_angle[1], this.camera_angle[0], this,this.camera_angle[1]);
+        this.move_camera();
     }
 
     mouseClick(){
@@ -80,8 +95,6 @@ class User{
         if(mouseButton === RIGHT){
             this.pointerLockOn = true;
             requestPointerLock();
-
-            //rotate the object
         }
     }
 }

@@ -1,6 +1,6 @@
 let SKYBOX_SRC;
 const SKYBOX_LENGTH = 512;
-const SKYBOX_MULTIPLIER = 10;
+const SKYBOX_MULTIPLIER = 20;
 const SKYBOX_HALF = SKYBOX_LENGTH * SKYBOX_MULTIPLIER * 0.5;
 let skyboxSides = [];
 let is_ready = false;
@@ -23,7 +23,6 @@ class Draw3DStuff{
             return;
         }
 
-        console.log("hi");
         push();
         noStroke();
 
