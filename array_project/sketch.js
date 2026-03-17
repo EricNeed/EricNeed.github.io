@@ -1,4 +1,5 @@
 let user_logic;
+let draw_3d;
 let characterID;
 
 function setup() {
@@ -6,12 +7,13 @@ function setup() {
   let character = new Character(0,0,0);
   characterID = character.characterID;
   user_logic = new User(characterID);
+  draw_3d = new Draw3DStuff();
 }
 
 function draw() {
   background(220);
 
-  console.log(camera.y);
+  //console.log(camera.y);
 
   //render character
   for(let c = 1; c<character_list.length; c++){//the first index is the current id, skip it
@@ -21,8 +23,9 @@ function draw() {
 
   orbitControl();
   
+  draw_3d.draw_3d();
 
-  //plane(10000, 10000);
+  //plane(768 * 8, 768 * 8);
 
   //translate(0, 0, 0);
   //box(100, 100);

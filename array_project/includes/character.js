@@ -68,9 +68,9 @@ class User{
     tickUser(){
         this.userKeyInput();
         this.userMouseInput();
-        console.log(movedX + "" + movedY);
+        //console.log(movedX + "" + movedY);
         
-        camera(0, 800, 0, this.camera_angle[0], this,this.camera_angle[1], this.camera_angle[0], this,this.camera_angle[1]);
+        //camera(0, 800, 0, this.camera_angle[0], this,this.camera_angle[1], this.camera_angle[0], this,this.camera_angle[1]);
     }
 
     mouseClick(){
@@ -80,6 +80,8 @@ class User{
         if(mouseButton === RIGHT){
             this.pointerLockOn = true;
             requestPointerLock();
+
+            //rotate the object
         }
     }
 }
