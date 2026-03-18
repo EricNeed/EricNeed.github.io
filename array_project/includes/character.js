@@ -14,9 +14,9 @@ class Character{
     constructor(primary_x, primary_y, primary_z, __type){
         character_list[0]++;
         this.characterID = character_list[0];
-        this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, 0,0,0];
+        this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, HALF_PI,0,0];
         this.moving_parts = [];
-
+        this.speeds = {left: 10, right: 10, forward: 10, backward: 10};
         this.x_sync_primary = false;//the plane tilt down when look down
         this.y_sync_primary = true;//the plane look at the direction pointing at
 
@@ -33,21 +33,29 @@ class User{
         this.pointerLockOn = false;
         this.sensitivity = 1;
         this.zoom = 1000;
-        this.camera_angle = {x: 0, y: 0};
+        this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
     }
 
+    //move the plane to each direction
     userKeyInput(){
-        let plane = character_list[this.characterID];
+        let player = character_list[this.characterID];
         const input_list = [87, 65, 83, 68, 69, 77];
-        
+
         for(let i = 0; i < input_list.length; i++){
             if(!keyIsDown(input_list[i])){
             continue;
             }
+
+            let v_angle;
+            let h_angle;
+            let speed;
+
             //input
             switch (i){
             case 0://forward
-                plane.primary_parts[2]++;
+                v_angle = player.primary_parts[8];
+                h_angle = player.primary_parts[9];
+                speed = player.speeds.forward;
                 break;
             case 1://left
                 break;
@@ -58,27 +66,51 @@ class User{
             case 4:
                 console.log("press E");
                 break;
+            default:
+                v_angle = 0;
+                h_angle = 0;
+                speed = 0;
             }
+
+            //for up:
+            // v_angle = player.primary_parts[9];
+            // h_angle = player.primary_parts[8];
+
+            let new_coord = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], v_angle, h_angle, speed);
+            player.primary_parts[2] = new_coord[0];
+            player.primary_parts[3] = new_coord[1];
+            player.primary_parts[4] = new_coord[2];
+            console.log(new_coord);
         }
     }
 
+    //camera orbit around primary part
     move_camera(){
         let player = character_list[this.characterID];
 
-        let x = player.primary_parts[2] + this.zoom * sin(this.camera_angle.x) * cos(this.camera_angle.y);
-        let y = player.primary_parts[3] + this.zoom * sin(this.camera_angle.x) * sin(this.camera_angle.y);
-        let z = player.primary_parts[4] + this.zoom * cos(this.camera_angle.x);
+        let camera_pos = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], this.camera_angle.v, this.camera_angle.h, this.zoom);
+        this.camera_angle.x = camera_pos[0];
+        this.camera_angle.y = camera_pos[1];
+        this.camera_angle.z = camera_pos[2];
 
-        camera(x, y, z, player.primary_parts[2], player.primary_parts[3], player.primary_parts[4]);
+        camera(this.camera_angle.x, this.camera_angle.y, this.camera_angle.z, player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], 0, 0, -1);
+
+        if(this.pointerLockOn){
+            player.primary_parts[8] = this.camera_angle.h;
+        }
+
+        //player.primary_parts[10] = this.camera_angle.v;
+        //player.primary_parts[10] += 0.01;
+        //console.log(player.primary_parts[10]);
     }
 
     //change fov angle
     userMouseInput(){
         let plane = character_list[this.characterID];
         if(this.pointerLockOn){
-            console.log(movedX + " " + movedY);
-            this.camera_angle.y += movedY * 0.01;
-            this.camera_angle.x += movedX * 0.005;
+            //console.log(movedX + " " + movedY);
+            this.camera_angle.v += movedY * 0.005;
+            this.camera_angle.h += movedX * 0.005;
         }
     }
 
@@ -97,4 +129,14 @@ class User{
             requestPointerLock();
         }
     }
+}
+
+//find any point on the sphere around a point
+function findPointAroundPoint(__x, __y, __z, v_angle, h_angle, dist){
+    //__x__y__z: center sphere coord
+    x = __x + dist * sin(v_angle) * cos(h_angle);
+    y = __y + dist * sin(v_angle) * sin(h_angle);
+    z = __z + dist * cos(v_angle);
+
+    return [x, y, z];
 }

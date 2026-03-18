@@ -25,7 +25,7 @@ function draw() {
   
   draw_3d.draw_3d();
 
-  // plane(768 * 8, 768 * 8);
+  plane(768 * 8, 768 * 8);
 
   //translate(0, 0, 0);
   //box(100, 100);
@@ -57,5 +57,11 @@ function mouseReleased(){
   if(user_logic.pointerLockOn){
     exitPointerLock();
     user_logic.pointerLockOn = false;
+  }
+}
+
+function mouseWheel(event){
+  if(event.delta !== 0){//scroll up
+    user_logic.zoom += event.delta * 0.5;
   }
 }

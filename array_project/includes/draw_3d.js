@@ -1,6 +1,6 @@
 let SKYBOX_SRC;
 const SKYBOX_LENGTH = 512;
-const SKYBOX_MULTIPLIER = 20;
+const SKYBOX_MULTIPLIER = 15;
 const SKYBOX_HALF = SKYBOX_LENGTH * SKYBOX_MULTIPLIER * 0.5;
 let skyboxSides = [];
 let is_ready = false;
@@ -28,14 +28,16 @@ class Draw3DStuff{
 
         for(let i = 0; i < 4; i++){
             resetMatrix();
+            translate(user_logic.camera_angle.x, user_logic.camera_angle.y, user_logic.camera_angle.z);
             rotateZ(HALF_PI * i);
             rotateX(-HALF_PI);
             translate(0, 0, SKYBOX_HALF);
             texture(skyboxSides[i]);
             plane(SKYBOX_LENGTH * SKYBOX_MULTIPLIER, SKYBOX_LENGTH * SKYBOX_MULTIPLIER);
         }
-
+        
         resetMatrix();
+        translate(user_logic.camera_angle.x, user_logic.camera_angle.y, user_logic.camera_angle.z);
         rotateZ(PI);
         translate(0, 0, SKYBOX_HALF);
         texture(skyboxSides[4]);
