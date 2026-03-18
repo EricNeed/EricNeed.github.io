@@ -91,7 +91,8 @@ class User{
                 speed = 0;
             }
 
-            67576
+            //this is just for testing
+
             //for up:
             // v_angle = player.primary_parts[9];
             // h_angle = player.primary_parts[8];
