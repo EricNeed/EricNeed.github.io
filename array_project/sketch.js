@@ -2,7 +2,11 @@ let user_logic;
 let draw_3d;
 let characterID;
 
+let grass;
+
 function setup() {
+  grass = loadImage('assets/grass2.jpg');
+
   createCanvas(windowWidth, windowHeight, WEBGL);
   let character = new Character(0,0,0);
   characterID = character.characterID;
@@ -25,7 +29,10 @@ function draw() {
   
   draw_3d.draw_3d();
 
+  push();
+  texture(grass);
   plane(768 * 8, 768 * 8);
+  pop();
 
   //translate(0, 0, 0);
   //box(100, 100);
