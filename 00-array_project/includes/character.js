@@ -14,7 +14,7 @@ class Character{
     constructor(primary_x, primary_y, primary_z, __type){
         character_list[0]++;
         this.characterID = character_list[0];
-        this.primary_parts = [0, false, primary_x, primary_y, primary_z, 100, 100, 100, 0,0,0];
+        this.primary_parts = [0, false, primary_x, primary_y, primary_z, 10, 10, 10, 0,0,0];
         this.moving_parts = [];
         this.speeds = {left: 10, right: 10, forward: 10, backward: 10};
         this.x_sync_primary = false;//the plane tilt down when look down
