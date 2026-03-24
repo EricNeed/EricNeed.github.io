@@ -2,6 +2,15 @@ const CELL_SIZE = 40;
 let rows;
 let column;
 let grid = [];
+let tick_every_frame = false;
+let gosper;
+
+const LIVECELL = 1;
+const DEADCELL = 0;
+
+function preload(){
+  gosper = loadJSON("gosper.json");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -23,7 +32,9 @@ function draw() {
     }
   }
 
-  tickCanvas();
+  if(tick_every_frame){
+    tickCanvas();
+  }
 }
 
 
@@ -59,11 +70,15 @@ function mouseClicked(){
 
 function keyPressed(){
   if(keyIsDown(82)){
-    gendGrid(grid, true);
+    genGrid(grid, true);
   }else if(keyIsDown(69)){
     genGrid(grid, false);
   }else if(keyIsDown(32)){
     tickCanvas();
+  }else if(keyIsDown(65)){
+    tick_every_frame = !tick_every_frame;
+  }else if(keyIsDown(71)){
+    grid = gosper;
   }
 }
 
@@ -97,10 +112,10 @@ function tickCells(x, y, new_grid){
   neighbors -= grid[y][x];
 
   if(neighbors === 3){
-    new_grid[y][x] = 1;
+    new_grid[y][x] = LIVECELL;
   }else if(neighbors === 2){
     new_grid[y][x] = grid[y][x];
   }else{    
-    new_grid[y][x] = 0;
+    new_grid[y][x] = DEADCELL;
   }
 }

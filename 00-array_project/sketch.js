@@ -19,11 +19,6 @@ function draw() {
 
   //console.log(camera.y);
 
-  //render character
-  for(let c = 1; c<character_list.length; c++){//the first index is the current id, skip it
-    let chara = character_list[c];
-    draw_shape(chara.primary_parts);
-  }
 
   //orbitControl();
   
@@ -42,16 +37,16 @@ function draw() {
 }
 
 //0: part type, 1: is movable part 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
-function draw_shape(part){
+function draw_shape(part, sI = 0){//sI: startIndex
   push();
-  translate(part[2], part[3], part[4]);
-  rotateX(part[10]);
-  rotateY(part[9]);
-  rotateZ(part[8]);
+  translate(part[2+sI], part[3+sI], part[4+sI]);
+  rotateX(part[10+sI]);
+  rotateY(part[9+sI]);
+  rotateZ(part[8+sI]);
 
-  switch(part[0]){
+  switch(part[0+sI]){
     case 0://box
-      box(part[5], part[6], part[7]);
+      box(part[5+sI], part[6+sI], part[7+sI]);
   }
   pop();
 }
