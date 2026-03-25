@@ -5,6 +5,8 @@ class User{
         this.sensitivity = 1;
         this.zoom = 1000;
         this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
+
+        this.UI = new UserUI();
     }
 
     //move the plane to each direction
@@ -118,6 +120,7 @@ class User{
         this.userKeyInput();
         this.userMouseInput();
         this.move_camera();
+        this.UI.tickUI();
     }
 
     mouseClick(){

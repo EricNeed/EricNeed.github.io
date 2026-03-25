@@ -9,6 +9,7 @@
 - [Perlin noise](06-perlin_noise)
 - [2d grid](07-grid)
 - [game of life](09-life)
+- [grid obsticle](10-grid_obsticle)
 ## Assignment
 - add assignment here
 - [Arrays and Object Notation](00-array_project)
