@@ -9,10 +9,6 @@ let ui;
 function setup() {
   grass = loadImage('assets/grass2.jpg');
 
-  ui = createGraphics(100, 100, P2D);
-
-  ui.background(220);
-
   createCanvas(windowWidth, windowHeight, WEBGL);
   let character = new Character(0,0,0);
   characterID = character.characterID;
@@ -34,7 +30,6 @@ function draw() {
   //user logic:
   user_logic.tickUser();
 
-  image(ui, 10, 10);
 }
 
 

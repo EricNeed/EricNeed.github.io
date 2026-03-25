@@ -120,7 +120,7 @@ class User{
         this.userKeyInput();
         this.userMouseInput();
         this.move_camera();
-        this.UI.tickUI();
+        this.UI.tickUI(this.camera_angle);
     }
 
     mouseClick(){
