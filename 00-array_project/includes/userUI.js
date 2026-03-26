@@ -3,6 +3,7 @@ const hui = 1;
 class UserUI{
     constructor(){
         this.I = 0;
+        this.I = 0;
     }
     tickUI(cameraPos){
 
