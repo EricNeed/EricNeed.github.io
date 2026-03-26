@@ -75,7 +75,7 @@ class User{
             push();
             translate(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4]);
             box(5, 5, 5);
-            resetMatrix()
+            resetMatrix();
             translate(new_coord[0], new_coord[1], new_coord[2]);
             box(10 , 10, 10);
             pop();
@@ -120,7 +120,7 @@ class User{
         this.userKeyInput();
         this.userMouseInput();
         this.move_camera();
-        this.UI.tickUI();
+        this.UI.tickUI(this.camera_angle);
     }
 
     mouseClick(){
