@@ -6,6 +6,11 @@ let grass;
 
 let ui;
 
+function preload(){
+  partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
+  character_list = partyLoadShared("character_list", {list: []});
+}
+
 function setup() {
   grass = loadImage('assets/grass2.jpg');
 
@@ -14,10 +19,15 @@ function setup() {
   characterID = character.characterID;
   user_logic = new User(characterID);
   draw_3d = new Draw3DStuff();
+
+  //console.log(character_list.list.length);
 }
 
 
 function draw() {
+
+  //console.log(character_list.list.length);
+
   background(220);
   
   draw_3d.draw_3d();
@@ -33,7 +43,7 @@ function draw() {
 
 
 function mousePressed(){
-  user_logic.mouseClick();
+  user_logic.eventClicked();
 }
 
 
@@ -49,4 +59,8 @@ function mouseWheel(event){
   if(event.delta !== 0){//scroll up
     user_logic.zoom += event.delta * 0.5;
   }
+}
+
+function keyPressed(){
+  user_logic.eventKey();
 }

@@ -51,8 +51,8 @@ class Draw3DStuff{
 //************************************************************************************************************** draw character*/
     //render character
     renderCharacters(){
-        for(let c = 1; c<character_list.length; c++){//the first index is the current id, skip it
-            let chara = character_list[c];
+        for(let c = 0; c<character_list.list.length; c++){
+            let chara = character_list.list[c];
             draw_shape(chara.primary_parts);
             let chara_part = plane_constrcts[chara.primary_parts[11]];
             
