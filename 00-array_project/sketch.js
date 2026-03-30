@@ -1,33 +1,27 @@
 let user_logic;
 let draw_3d;
-let characterID;
-
 let grass;
-
 let ui;
+let myShare;
+let otherShares;
 
 function preload(){
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
-  character_list = partyLoadShared("character_list", {list: []});
+  myShare = partyLoadMyShared();
+  otherShares = partyLoadGuestShareds();
 }
 
 function setup() {
   grass = loadImage('assets/grass2.jpg');
 
   createCanvas(windowWidth, windowHeight, WEBGL);
-  let character = new Character(0,0,0);
-  characterID = character.characterID;
-  user_logic = new User(characterID);
+  myShare.chara = new Character(0,0,0);
+  user_logic = new User();
   draw_3d = new Draw3DStuff();
-
-  //console.log(character_list.list.length);
 }
 
 
 function draw() {
-
-  //console.log(character_list.list.length);
-
   background(220);
   
   draw_3d.draw_3d();

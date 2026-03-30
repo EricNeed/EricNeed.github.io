@@ -1,17 +1,16 @@
 class User{
-    constructor(__ID){
-        this.characterID = __ID;
+    constructor(){
         this.pointerLockOn = false;
         this.sensitivity = 0.005;
         this.zoom = 100;
         this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
 
-        this.UI = new UserUI(__ID);
+        this.UI = new UserUI();
     }
 
     //move the plane to each direction
     userKeyInput(){
-        let player = character_list.list[this.characterID];
+        let player = myShare.chara;
         const input_list = [87, 65, 83, 68, 69, 32, 16];
 
         for(let i = 0; i < input_list.length; i++){
@@ -49,7 +48,7 @@ class User{
 
     //camera orbit around primary part
     move_camera(){
-        let player = character_list.list[this.characterID];
+        let player = myShare.chara;
 
         let camera_pos = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], this.camera_angle.v, this.camera_angle.h, this.zoom);//camera
         this.camera_angle.x = camera_pos[0];
@@ -69,7 +68,6 @@ class User{
 
     //change fov angle
     userMouseInput(){
-        let plane = character_list.list[this.characterID];
         if(this.pointerLockOn){
             //prevent the camera to move more than 180 degree vertically, or else it will flip over for some reason
             let new_vertical = this.camera_angle.v + movedY * this.sensitivity;
@@ -99,7 +97,7 @@ class User{
     }
 
     moveCharacter(v_add, h_add, speed){
-        const player = character_list.list[this.characterID];
+        const player = myShare.chara;
         let new_coord = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], player.primary_parts[9]+v_add, player.primary_parts[8]+h_add, speed);
 
         push();

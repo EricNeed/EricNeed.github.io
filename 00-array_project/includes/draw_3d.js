@@ -49,25 +49,29 @@ class Draw3DStuff{
     }
 
 //************************************************************************************************************** draw character*/
+    renderCharacter(chara){
+        draw_shape(chara.primary_parts);
+        let chara_part = plane_constrcts[chara.primary_parts[11]];
+        
+        push();
+        for(let p = 0; p < chara.length; p+=11){
+        //draw_shape(chara_part, p, );
+        }
+        pop();
+    }
+
     //render character
-    renderCharacters(){
-        for(let c = 0; c<character_list.list.length; c++){
-            let chara = character_list.list[c];
-            draw_shape(chara.primary_parts);
-            let chara_part = plane_constrcts[chara.primary_parts[11]];
-            
-            push();
-            for(let p = 0; p < chara.length; p+=11){
-            draw_shape(chara_part, p, );
-            }
-            pop();
+    renderAllCharacters(){
+        this.renderCharacter(myShare.chara);
+        for(const otherShare of otherShares){
+            this.renderCharacter(otherShare.chara);
         }
     }
 
 //************************************************************************************************************** draw*/
     draw_3d(){
         this.drawSkyBox();
-        this.renderCharacters();
+        this.renderAllCharacters();
     }
 }
 
