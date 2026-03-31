@@ -43,7 +43,7 @@ class UserUI{
 
     drawMap(){
         const oneGridSize = this.MAP_GUI_SIZE/this.ROW_COLL;
-        const GUICorner = this.ROW_COLL/2 * oneGridSize;
+        const GUICorner = -(this.ROW_COLL/2 * oneGridSize);
 
         //display the 2d grid array map that shows the position of enemies
         image(this.mapBG, this.MAP_GUI_SIZE*-0.5, this.MAP_GUI_SIZE*-0.5, this.MAP_GUI_SIZE, this.MAP_GUI_SIZE);
@@ -73,7 +73,9 @@ class UserUI{
         for(let y = 0; y < this.ROW_COLL; y++){
             for(let x = 0; x < this.ROW_COLL; x++){
                 if(!!otherPlayerOnMap[y][x]){
+                    console.log("try load location");
                     image(this.othersLocation, GUICorner + x*oneGridSize, GUICorner + y*oneGridSize, oneGridSize, oneGridSize);
+                    //image(this.othersLocation, GUICorner, GUICorner, oneGridSize, oneGridSize);
                 }
             }
         }

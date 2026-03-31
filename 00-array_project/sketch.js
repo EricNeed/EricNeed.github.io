@@ -1,6 +1,10 @@
+// Project Name: Air Assult
+// By Eric Ni
+// 3/30/2026
+// a 3d game about plane battle each other, still under development
+
 let user_logic;
 let draw_3d;
-let grass;
 let ui;
 let myShare;
 let otherShares;
@@ -12,7 +16,6 @@ function preload(){
 }
 
 function setup() {
-  grass = loadImage('assets/grass2.jpg');
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   myShare.chara = new Character(0,0,0);
@@ -25,11 +28,6 @@ function draw() {
   background(220);
   
   draw_3d.draw_3d();
-
-  push();
-  texture(grass);
-  plane(768 * 8, 768 * 8);
-  pop();
 
   //user logic:
   user_logic.tickUser();

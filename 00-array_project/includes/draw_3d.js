@@ -1,9 +1,11 @@
 let SKYBOX_SRC;
+let grass;
 const SKYBOX_LENGTH = 512;
 const SKYBOX_MULTIPLIER = 15;
 const SKYBOX_HALF = SKYBOX_LENGTH * SKYBOX_MULTIPLIER * 0.5;
 let skyboxSides = [];
 let is_ready = false;
+
 function loadSkybox(){
     skyboxSides[3] = SKYBOX_SRC.get(0, SKYBOX_LENGTH, SKYBOX_LENGTH, SKYBOX_LENGTH);
     skyboxSides[2] = SKYBOX_SRC.get(SKYBOX_LENGTH, SKYBOX_LENGTH, SKYBOX_LENGTH, SKYBOX_LENGTH);
@@ -15,8 +17,11 @@ function loadSkybox(){
 class Draw3DStuff{
     constructor(){
         SKYBOX_SRC = loadImage('assets/skybox.png', loadSkybox);
+        grass = loadImage('assets/grass2.jpg');
         
     }
+
+
 //************************************************************************************************************** skybox*/
     drawSkyBox(){
         if(!(is_ready || skyboxSides.length === 6)){
@@ -48,6 +53,7 @@ class Draw3DStuff{
         pop();
     }
 
+
 //************************************************************************************************************** draw character*/
     renderCharacter(chara){
         draw_shape(chara.primary_parts);
@@ -62,15 +68,25 @@ class Draw3DStuff{
 
     //render character
     renderAllCharacters(){
-        this.renderCharacter(myShare.chara);
         for(const otherShare of otherShares){
             this.renderCharacter(otherShare.chara);
         }
     }
 
-//************************************************************************************************************** draw*/
+
+//************************************************************************************************************** draw terrain*/
+    drawTerrain(){
+        push();
+        texture(grass);
+        plane(2048, 2048);
+        pop();
+    }
+
+
+//************************************************************************************************************** main draw*/
     draw_3d(){
         this.drawSkyBox();
+        this.drawTerrain();
         this.renderAllCharacters();
     }
 }
