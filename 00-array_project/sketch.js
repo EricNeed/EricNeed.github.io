@@ -8,14 +8,18 @@ let draw_3d;
 let ui;
 let myShare;
 let otherShares;
+let gameInfo;
 
 function preload(){
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
+  gameInfo = partyLoadShared("Game_Info", {currentID :0});
   myShare = partyLoadMyShared();
   otherShares = partyLoadGuestShareds();
 }
 
 function setup() {
+  myShare.ID = gameInfo.currentID;
+  gameInfo.currentID++;
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   myShare.chara = new Character(0,0,0);
