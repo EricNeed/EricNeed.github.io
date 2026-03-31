@@ -79,7 +79,7 @@ class UserUI{
 
         //display the self arrow in the center of the map, with rotation
         push();
-        rotateZ(this.angleSelfCached + PI);
+        rotateZ(-this.angleSelfCached - PI);
         image(this.mapSelfArrow, -oneGridSize/2, -oneGridSize/2, oneGridSize, oneGridSize);
         pop();
 

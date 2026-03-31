@@ -57,13 +57,13 @@ class Draw3DStuff{
 //************************************************************************************************************** draw character*/
     renderCharacter(chara){
         draw_shape(chara.primary_parts);
-        let chara_part = plane_constrcts[chara.primary_parts[11]];
+        let chara_part = plane_constructs[chara.primary_parts[11]];
         
+        for(let p = 0; p < chara_part; p+=11){
         push();
-        for(let p = 0; p < chara.length; p+=11){
-        //draw_shape(chara_part, p, );
-        }
+        draw_shape(chara_part, p);
         pop();
+        }
     }
 
     //render character

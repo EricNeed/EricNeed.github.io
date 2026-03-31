@@ -100,16 +100,14 @@ class User{
         const player = myShare.chara;
         let new_coord = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], player.primary_parts[9]+v_add, player.primary_parts[8]+h_add, speed);
 
-        push();
-
-        //debug vector viual
-        translate(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4]);
-        box(5, 5, 5);
-        resetMatrix();
-
-        translate(new_coord[0], new_coord[1], new_coord[2]);
-        box(10 , 10, 10);
-        pop();
+        //debug vector visual
+        // push();
+        // translate(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4]);
+        // box(5, 5, 5);
+        // resetMatrix();
+        // translate(new_coord[0], new_coord[1], new_coord[2]);
+        // box(10 , 10, 10);
+        // pop();
 
         player.primary_parts[2] = new_coord[0];
         player.primary_parts[3] = new_coord[1];
