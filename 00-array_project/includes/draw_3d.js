@@ -56,20 +56,36 @@ class Draw3DStuff{
 
 //************************************************************************************************************** draw character*/
     renderCharacter(chara){
-        draw_shape(chara.primary_parts);
+        strokeWeight(0.1);
+        this.transformAndDraw3D(chara.primary_parts, 0, true);
         let chara_part = plane_constructs[chara.primary_parts[11]];
         
-        for(let p = 0; p < chara_part; p+=11){
-        push();
-        draw_shape(chara_part, p);
-        pop();
+        for(let p = 0; p < chara_part.length; p+=11){
+            this.transformAndDraw3D(chara_part, p);
         }
+        pop();//pop the trnaformation because transformAndDraw3D ordered to not pop
     }
 
     //render character
     renderAllCharacters(){
         for(const otherShare of otherShares){
             this.renderCharacter(otherShare.chara);
+        }
+    }
+
+    //0: part type, 1: is movable part 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
+    transformAndDraw3D(part, sI = 0, kept_transition = false){
+        //be cautious when using this function, when "kept_transition" is true, remember to call pop() afterward
+        push();
+        translate(part[2+sI], part[3+sI], part[4+sI]);
+        rotateX(part[10+sI]);
+        rotateY(part[9+sI]);
+        rotateZ(part[8+sI]);
+
+        draw_shape(part[0+sI], part[5+sI], part[6+sI], part[7+sI]);
+
+        if(!kept_transition){
+            pop();
         }
     }
 
@@ -91,17 +107,9 @@ class Draw3DStuff{
     }
 }
 
-//0: part type, 1: is movable part 2: x offset, 3: y offset, 4: z offset, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
-function draw_shape(part, sI = 0){//sI: startIndex
-    push();
-    translate(part[2+sI], part[3+sI], part[4+sI]);
-    rotateX(part[10+sI]);
-    rotateY(part[9+sI]);
-    rotateZ(part[8+sI]);
-
-    switch(part[0+sI]){
+function draw_shape(shape, length, width, height){//sI: startIndex
+    switch(shape){
         case 0://box
-        box(part[5+sI], part[6+sI], part[7+sI]);
+        box(length, width, height);
     }
-    pop();
 }

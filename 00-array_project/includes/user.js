@@ -5,7 +5,6 @@ class User{
         this.zoom = 100;
         this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
 
-        this.UI = new UserUI();
     }
 
     //move the plane to each direction
@@ -83,7 +82,7 @@ class User{
         this.userKeyInput();
         this.userMouseInput();
         this.move_camera();
-        this.UI.tickUI(this.camera_angle);
+        user_ui.tickUI(this.camera_angle);
     }
 
     eventClicked(){
@@ -116,8 +115,14 @@ class User{
     }
 
     eventKey(){
-        if(key === 'm'){
-            this.UI.enable_map = !this.UI.enable_map;
+        //for key event that you only tap once
+        switch(keyCode){
+            case 77://m
+                user_ui.enable_map = !user_ui.enable_map;
+                break;
+            case 221://"]" key
+                creatorMode = new PlaneMaker();
+                break;
         }
-    }
+    }//https://www.toptal.com/developers/keycode
 }

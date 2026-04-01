@@ -1,4 +1,5 @@
-
+let buttons = [];
+const buttonTemplate = {x:0, y:0, dx:0, dy:0, pressed:false, idleColor:[255,255,255,255], activeColor:[255,255,255,255], text:""};
 
 class UserUI{
     constructor(){
@@ -95,6 +96,11 @@ class UserUI{
 
         //tick the interval
         this.current_frame--;
+    }
+
+    //call this function when mouse left licked to check if a button is pressed
+    buttonPressed(){
+
     }
 
     preloadGUIElements(){

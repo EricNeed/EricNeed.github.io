@@ -5,7 +5,9 @@
 
 let user_logic;
 let draw_3d;
-let ui;
+let user_ui;
+let creatorMode;//this is optional, only create object when host want to make a plane
+
 let myShare;
 let otherShares;
 let gameInfo;
@@ -24,6 +26,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   myShare.chara = new Character(0,0,0);
   user_logic = new User();
+  user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
 }
 
