@@ -29,8 +29,6 @@ function setup() {
   user_logic = new User();
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
-
-  createIGButton(0, 0, 0.5, 0.5);
 }
 
 

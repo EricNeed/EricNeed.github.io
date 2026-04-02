@@ -1,6 +1,7 @@
 let buttons = [];
 const buttonTemplate = {x:0, y:0, dx:0, dy:0, pressed:false, idleColor:[255,255,255,255], activeColor:[255,255,255,255], text:"button text", show:true};
 
+
 class UserUI{
     constructor(){
         this.enable_map = false;
