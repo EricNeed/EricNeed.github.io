@@ -87,6 +87,7 @@ class User{
 
     eventClicked(){
         if(mouseButton === LEFT){
+            user_ui.buttonPressed();
             console.log("left clicked");
         }
         if(mouseButton === RIGHT){
