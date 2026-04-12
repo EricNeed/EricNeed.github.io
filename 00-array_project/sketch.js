@@ -11,9 +11,10 @@ let creatorMode;//this is optional, only create object when host want to make a 
 let myShare;
 let otherShares;
 let gameInfo;
+let font;
 
 function preload(){
-  load
+  font = loadFont("assets\\Inconsolata\\Inconsolata.otf");
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
   gameInfo = partyLoadShared("Game_Info", {currentID :0});
   myShare = partyLoadMyShared();
@@ -29,6 +30,8 @@ function setup() {
   user_logic = new User();
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
+
+  createIGButton(0, 0, 0.5, 0.5);
 }
 
 

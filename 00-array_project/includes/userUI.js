@@ -104,10 +104,11 @@ class UserUI{
     // draw the GUI buttons
     drawButton(){
         for(const button of buttons){
-            //console.log(`${button.x} ${button.y} ${button.dx} ${button.dy}`);
+            textFont(font);
+            console.log(`${button.x} ${button.y} ${button.dx} ${button.dy}`);
             if(!button.show){continue};
             fill(button.pressed? button.activeColor:button.idleColor);
-            rect(button.x, button.y,  button.dx, button.dy);
+            rect(button.x, button.y, button.dx, button.dy);
             fill(128);
             text(button.text, button.x, button.y);
         }
