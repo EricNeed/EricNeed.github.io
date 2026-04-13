@@ -31,7 +31,7 @@ function setup() {
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
 
-  createIGButton(0, 0, 0.5, 0.5);
+  //createIGButton(0, 0, 0.1, 0.1, 0.3);
 }
 
 
@@ -60,7 +60,11 @@ function mouseReleased(){
 
 function mouseWheel(event){
   if(event.delta !== 0){//scroll up
-    user_logic.zoom += event.delta * 0.5;
+    let new_zoom = user_logic.zoom + event.delta * 0.5;
+    if(new_zoom >= 0){
+      //console.log(`zoom: ${new_zoom}`);
+      user_logic.zoom = new_zoom;
+    }
   }
 }
 

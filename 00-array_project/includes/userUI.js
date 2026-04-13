@@ -1,11 +1,12 @@
 let buttons = [];
-const buttonTemplate = {x:0, y:0, dx:0, dy:0, pressed:false, idleColor:[255,255,255,255], activeColor:[255,255,255,255], text:"button text", show:true};
+const buttonTemplate = {x:0, y:0, dx:0, dy:0, pressed:false, idleColor:[255,255,255,255], activeColor:[128,128,128,255], text:"button text", text_size:0, show:true};
 
 
 class UserUI{
     constructor(){
         this.enable_map = false;
 
+        this.NEAR_DST = -80.01;//the distance from camera position to near plane
         this.DOWNSCALE_FACTOR = 95.5 * (windowHeight/945);// the downscale factor to fit the current screen height
         this.GUI_WIDTH = windowWidth/windowHeight * this.DOWNSCALE_FACTOR;// the width of screen in term of the gui position
         this.MAP_GUI_SIZE = floor(0.95  * this.DOWNSCALE_FACTOR);
@@ -34,9 +35,11 @@ class UserUI{
         translate(cameraPos.x, cameraPos.y, cameraPos.z);
         rotateZ(cameraPos.h + HALF_PI);
         rotateX(cameraPos.v + HALF_PI);
-        translate(0, -80.01, 0);
-        rotateX(HALF_PI);
+        translate(0, this.NEAR_DST, 0);
+        rotateX(HALF_PI + PI);
         noStroke();
+
+        textAlign(CENTER, CENTER);
 
         // draw the map
         if(this.enable_map){
@@ -45,6 +48,12 @@ class UserUI{
 
         // draw the button
         this.drawButton();
+
+        // this.I+= 0.01;
+        // push();
+        // rotateX(this.I);
+        // plane(10, 10);
+        // pop();
 
         pop();
     }
@@ -56,7 +65,7 @@ class UserUI{
         // display the 2d grid array map that shows the position of enemies
         image(this.mapBG, this.MAP_GUI_SIZE*-0.5, this.MAP_GUI_SIZE*-0.5, this.MAP_GUI_SIZE, this.MAP_GUI_SIZE);
 
-        // only refresh once every REFRESH_INTERVAL
+        // update the 2d array, only refresh once every REFRESH_INTERVAL
         if(this.current_frame <= 0){
             this.current_frame = this.REFRESH_INTERVAL;
 
@@ -83,7 +92,7 @@ class UserUI{
 
         // display the self arrow in the center of the map, with rotation
         push();
-        rotateZ(-this.angleSelfCached - PI);
+        rotateZ(this.angleSelfCached + PI);
         image(this.mapSelfArrow, -oneGridSize/2, -oneGridSize/2, oneGridSize, oneGridSize);
         pop();
 
@@ -91,8 +100,8 @@ class UserUI{
         for(let y = 0; y < this.ROW_COLL; y++){
             for(let x = 0; x < this.ROW_COLL; x++){
                 if(!!this.currentMapCached[y][x]){
-                    // image(this.othersLocation, -GUICorner + x*oneGridSize, GUICorner - (y+1)*oneGridSize, oneGridSize, oneGridSize);
-                    image(this.othersLocation, -GUICorner + y*oneGridSize, -GUICorner + x*oneGridSize, oneGridSize, oneGridSize);
+                    //image(this.othersLocation, -GUICorner + y*oneGridSize, -GUICorner + x*oneGridSize, oneGridSize, oneGridSize);
+                    image(this.othersLocation, GUICorner - y*oneGridSize, -GUICorner + x*oneGridSize, oneGridSize, oneGridSize);
                 }
             }
         }
@@ -104,14 +113,21 @@ class UserUI{
     // draw the GUI buttons
     drawButton(){
         for(const button of buttons){
-            textFont(font);
-            console.log(`${button.x} ${button.y} ${button.dx} ${button.dy}`);
             if(!button.show){continue};
             fill(button.pressed? button.activeColor:button.idleColor);
             rect(button.x, button.y, button.dx, button.dy);
-            fill(128);
-            text(button.text, button.x, button.y);
         }
+        //i have to translate the text just a little closer to the camera so it stop z-fighting with the button body
+        push();
+        textFont(font);
+        fill(128);
+        translate(0, 0, 0.001);
+        for(const button of buttons){
+            if(!button.show){continue};
+            textSize(button.text_size);
+            text(button.text, button.x + button.dx/2, button.y + button.dy/2);
+        }
+        pop();
     }
 
     // call this function when mouse left licked to check if a button is pressed
@@ -119,15 +135,16 @@ class UserUI{
         const pixelToUnitX = this.GUI_WIDTH/windowWidth;
         const pixelToUnitY = this.DOWNSCALE_FACTOR/windowHeight;
 
-        let mouseUnitX = mouseX*pixelToUnitX;
-        let mouseUnitY = mouseY*pixelToUnitY;
+        let mouseUnitX = mouseX*pixelToUnitX - this.GUI_WIDTH/2;
+        let mouseUnitY = mouseY*pixelToUnitY - this.DOWNSCALE_FACTOR/2;
+        //console.log(`check button ${mouseUnitX} ${mouseUnitY}`);
 
         for(let button of buttons){
             if(mouseUnitX < button.x || mouseUnitX > button.x+button.dx || mouseUnitY > button.y+button.dy || mouseUnitY < button.y){
                 continue;
             }
-
-            button.pressed = true;
+            console.log(`button prressed`);
+            button.pressed = !button.pressed; //all button are default toggle, if you want push switch then you should deactivate it in another script
             break;
         }
     }
@@ -168,16 +185,55 @@ class UserUI{
 }
 
 // create a new button
-function createIGButton(x, y, dx, dy){
+function createIGButton(x, y, dx, dy, text_size = 1, the_text = 67){//text size is the percentage of dy
     let new_button = structuredClone(buttonTemplate);
 
     new_button.x = user_ui.GUI_WIDTH * x;
     new_button.y = user_ui.DOWNSCALE_FACTOR * y;
     new_button.dy = user_ui.DOWNSCALE_FACTOR * dy;
     new_button.dx = user_ui.GUI_WIDTH * dx;
+    new_button.text_size = new_button.dy * text_size;
+
+    if(!(the_text === 67)){
+        new_button.text = the_text;
+    }
 
     console.log(`${new_button.x} ${new_button.y} ${new_button.dx} ${new_button.dy}`);
 
     buttons.push(new_button);
     return new_button;
+}
+
+function hi(){
+    for(const button of buttons){
+        if(!button.show){continue};
+        fill(button.pressed? button.activeColor:button.idleColor);
+        rect(button.x, button.y, button.dx, button.dy);
+    }
+    push();
+    textFont(font);
+    fill(128);
+    textSize(button.text_size);
+    translate(0, this.NEAR_DST+0.001, 0);
+    for(const button of buttons){
+        if(!button.show){continue};
+        text(button.text, button.x + button.dx/2, button.y + button.dy/2);
+    }
+    pop();
+
+
+
+    for(const button of buttons){
+        textFont(font);
+        //console.log(`${button.x} ${button.y} ${button.dx} ${button.dy}`);
+        if(!button.show){continue};
+        fill(button.pressed? button.activeColor:button.idleColor);
+        rect(button.x, button.y, button.dx, button.dy);
+        push();
+        translate(0, this.NEAR_DST+0.001, 0);
+        fill(128);
+        textSize(button.text_size);
+        text(button.text, button.x + button.dx/2, button.y + button.dy/2);
+        pop();
+    }
 }

@@ -6,7 +6,7 @@ class User{
         this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
 
     }
-
+    
     //move the plane to each direction
     userKeyInput(){
         let player = myShare.chara;
@@ -56,7 +56,7 @@ class User{
 
         camera(this.camera_angle.x, this.camera_angle.y, this.camera_angle.z, player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], 0, 0, -1);
 
-        if(this.pointerLockOn){
+        if(this.pointerLockOn && myShare.chara.y_sync_primary){
             player.primary_parts[8] = this.camera_angle.h;
         }
 
@@ -122,7 +122,10 @@ class User{
                 user_ui.enable_map = !user_ui.enable_map;
                 break;
             case 221://"]" key
-                creatorMode = new PlaneMaker();
+                if(!(creatorMode instanceof PlaneMaker)){
+                    console.log("creator mode enabled");
+                    creatorMode = new PlaneMaker();
+                }
                 break;
         }
     }//https://www.toptal.com/developers/keycode
