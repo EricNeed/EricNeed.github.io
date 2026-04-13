@@ -110,6 +110,12 @@ class Draw3DStuff{
 function draw_shape(shape, length, width, height){//sI: startIndex
     switch(shape){
         case 0://box
-        box(length, width, height);
+            box(length, width, height);
+        break;
+        case 1://cylinder, height is its level of detail
+            cylinder(length, width, height);
+        break;
+        case 2://cone, height is its level of detail
+            cone(length, width, height);
     }
 }

@@ -49,11 +49,9 @@ class UserUI{
         // draw the button
         this.drawButton();
 
-        // this.I+= 0.01;
-        // push();
-        // rotateX(this.I);
-        // plane(10, 10);
-        // pop();
+        if(creatorMode instanceof PlaneMaker){
+            creatorMode.tickEditorGUI();
+        }
 
         pop();
     }
