@@ -10,7 +10,7 @@ class User{
     //move the plane to each direction
     userKeyInput(){
         let player = myShare.chara;
-        const input_list = [87, 65, 83, 68, 69, 32, 16];
+        const input_list = [87, 65, 83, 68, 69, 32, 16, 17];
 
         for(let i = 0; i < input_list.length; i++){
             if(!keyIsDown(input_list[i])){
@@ -39,7 +39,11 @@ class User{
                 break;
             case 6://up
                 this.moveCharacter(PI, 0, player.speeds.down);
-                break;        
+                break;
+            case 7://ctrl
+                if(myShare.creatorEnabled){
+                    creatorMode.distMultiplier = 2;
+                }        
             }
 
         }
@@ -122,9 +126,10 @@ class User{
                 user_ui.enable_map = !user_ui.enable_map;
                 break;
             case 221://"]" key
-                if(!(creatorMode instanceof PlaneMaker)){
+                if(!myShare.creatorEnabled){
                     console.log("creator mode enabled");
                     creatorMode = new PlaneMaker();
+                    myShare.creatorEnabled = true;
                 }
                 break;
         }

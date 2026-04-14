@@ -27,6 +27,7 @@ function setup() {
 
   createCanvas(windowWidth, windowHeight, WEBGL);
   myShare.chara = new Character(0,0,0);
+  myShare.creatorEnabled = false;
   user_logic = new User();
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
@@ -60,7 +61,7 @@ function mouseReleased(){
 
 function mouseWheel(event){
   if(event.delta !== 0){//scroll up
-    let new_zoom = user_logic.zoom + event.delta * 0.5;
+    let new_zoom = user_logic.zoom + event.delta * 0.1;
     if(new_zoom >= 0){
       //console.log(`zoom: ${new_zoom}`);
       user_logic.zoom = new_zoom;

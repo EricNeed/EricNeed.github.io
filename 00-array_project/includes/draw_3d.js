@@ -56,6 +56,7 @@ class Draw3DStuff{
 
 //************************************************************************************************************** draw character*/
     renderCharacter(chara){
+        if(chara.primary_parts === undefined){return;}
         strokeWeight(0.1);
         this.transformAndDraw3D(chara.primary_parts, 0, true);
         let chara_part = plane_constructs[chara.primary_parts[11]];
@@ -69,6 +70,7 @@ class Draw3DStuff{
     //render character
     renderAllCharacters(){
         for(const otherShare of otherShares){
+            if(otherShare.ID !== myShare.ID && otherShare.creatorEnabled || otherShare.chara.primary_parts === undefined){continue;}
             this.renderCharacter(otherShare.chara);
         }
     }
