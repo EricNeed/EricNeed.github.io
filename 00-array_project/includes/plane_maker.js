@@ -12,9 +12,9 @@ class PlaneMaker{
             createIGButton(0.07, 0.42, 0.05, 0.05, 0.4, "rotateX"),
             createIGButton(0.14, 0.42, 0.05, 0.05, 0.4, "rotateY"),
             createIGButton(0.21, 0.42, 0.05, 0.05, 0.4, "rotateZ"),
-            createIGButton(0.28, 0.42, 0.05, 0.05, 0.4, "sizeX/rad"),
-            createIGButton(0.35, 0.42, 0.05, 0.05, 0.4, "sizeY/LOD"),
-            createIGButton(0.42, 0.42, 0.05, 0.05, 0.4, "sizeZ"),
+            createIGButton(0.28, 0.42, 0.05, 0.05, 0.3, "sizeX/rad"),
+            createIGButton(0.35, 0.42, 0.05, 0.05, 0.3, "sizeY/height"),
+            createIGButton(0.42, 0.42, 0.05, 0.05, 0.3, "sizeZ/LOD"),
             createIGButton(-0.49, 0.30, 0.05, 0.05, 0.4, "cube"),
             createIGButton(-0.49, 0.36, 0.05, 0.05, 0.4, "cylinder"),
             createIGButton(-0.49, 0.42, 0.05, 0.05, 0.4, "cone"),
@@ -26,9 +26,11 @@ class PlaneMaker{
         myShare.chara.primary_parts[11] = this.new_plane_index;
 
         this.newPartHeadIndex = 0; //the begining index of current editing part of plane
+        this.radiusMode = false;//whether button [10,11,12] is [sizeX, sizeY, sizeZ], or [radius, height, lod]
     }
 
     tickEditorGUI(){
+
         //tick all the buttons
         for(let i = 0; i<this.editorButton.length; i++){
             let current_button = this.editorButton[i];
@@ -54,12 +56,17 @@ class PlaneMaker{
                 case 8:
                 break;
                 case 9:
+                    this.new_plane[this.newPartHeadIndex+5] = round(this.new_plane[this.newPartHeadIndex+5] + (this.radiusMode? 0.1 : 0.2), 1);//more percise control in radius mode
                 break;
                 case 10:
-                    this.new_plane[this.newPartHeadIndex+6] +=
+                    this.new_plane[this.newPartHeadIndex+6] = round(this.new_plane[this.newPartHeadIndex+6] + 0.2, 1);
                 break;
                 case 11:
-                    this.new_plane[this.newPartHeadIndex+7] += 0.2
+                    if(this.radiusMode){
+                        this.new_plane[this.newPartHeadIndex+7] = round(this.new_plane[this.newPartHeadIndex+7] + 1);//lod only support interger
+                    }else{
+                        this.new_plane[this.newPartHeadIndex+7] = round(this.new_plane[this.newPartHeadIndex+7] + 0.2,1);
+                    }
                 break;
                 case 12:
                     console.log("adding a cube");
@@ -67,6 +74,11 @@ class PlaneMaker{
                     this.new_plane[this.newPartHeadIndex] = 0;
                     this.new_plane[this.newPartHeadIndex+1] = false;
                     this.fillInDefaultPlacement(this.newPartHeadIndex);
+                    this.new_plane[this.newPartHeadIndex+2] = 10;
+                    this.new_plane[this.newPartHeadIndex+5] = 1;
+                    this.new_plane[this.newPartHeadIndex+6] = 1;
+                    this.new_plane[this.newPartHeadIndex+7] = 1;
+                    this.radiusMode = false;
                 break;
                 case 13:
                     console.log("adding a cylinder");
@@ -74,6 +86,11 @@ class PlaneMaker{
                     this.new_plane[this.newPartHeadIndex] = 1;
                     this.new_plane[this.newPartHeadIndex+1] = false;
                     this.fillInDefaultPlacement(this.newPartHeadIndex);
+                    this.new_plane[this.newPartHeadIndex+2] = 10;
+                    this.new_plane[this.newPartHeadIndex+5] = 1;
+                    this.new_plane[this.newPartHeadIndex+6] = 1;
+                    this.new_plane[this.newPartHeadIndex+7] = 4;
+                    this.radiusMode = true;
                 break;
                 case 14:
                     console.log("adding a cone");
@@ -81,10 +98,16 @@ class PlaneMaker{
                     this.new_plane[this.newPartHeadIndex] = 2;
                     this.new_plane[this.newPartHeadIndex+1] = false;
                     this.fillInDefaultPlacement(this.newPartHeadIndex);
+                    this.new_plane[this.newPartHeadIndex+2] = 10;
+                    this.new_plane[this.newPartHeadIndex+5] = 1;
+                    this.new_plane[this.newPartHeadIndex+6] = 1;
+                    this.new_plane[this.newPartHeadIndex+7] = 4;
+                    this.radiusMode = true;
                 break;
             }
 
             current_button.pressed = false;
+            console.log(this.new_plane);
             break;
         }
     }

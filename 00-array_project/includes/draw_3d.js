@@ -81,7 +81,7 @@ class Draw3DStuff{
         rotateX(part[10+sI]);
         rotateY(part[9+sI]);
         rotateZ(part[8+sI]);
-
+        //fill([128, 128, 128, 158]);
         draw_shape(part[0+sI], part[5+sI], part[6+sI], part[7+sI]);
 
         if(!kept_transition){

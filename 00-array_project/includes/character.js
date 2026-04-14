@@ -1,4 +1,4 @@
-let part = [0,1,1,1,1,1,1,1,1,0];//0: part type, 1: is can collide 2: x, 3: y, 4: z, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention, 8: yawn, 9: pitch, 10:roll
+let part = [0,1,1,1,1,1,1,1,1,0];//0: part type, 1: is can collide 2: x, 3: y, 4: z, 5: x dimention/radius, 6: y dimention/height, 7:z_dimention/lod, 8: yawn, 9: pitch, 10:roll
 
 //different type of plane
 const plane_constructs = [//the first 1 index of each is the primary part
