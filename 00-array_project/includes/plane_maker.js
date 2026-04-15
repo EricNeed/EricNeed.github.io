@@ -24,8 +24,8 @@ class PlaneMaker{
         this.infoText = createIGButton(-0.3, 0.35, 0.7, 0.06, 0.4, "hi");
         this.infoText.idleColor = [0,0,0, 128];
 
-        this.new_plane_index = plane_constructs.length;
-        this.new_plane = plane_constructs[this.new_plane_index] = [];
+        this.new_plane_index = gameInfo.planeConstrcuts.length;
+        this.new_plane = gameInfo.planeConstrcuts[this.new_plane_index] = [];
         myShare.chara.y_sync_primary = false;
         myShare.chara.primary_parts[11] = this.new_plane_index;
 

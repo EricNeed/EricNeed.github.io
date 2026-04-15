@@ -14,9 +14,12 @@ let gameInfo;
 let font;
 
 function preload(){
+  //planes
+  defaultPlanes[0] = loadJSON("assets\\planes\\plane_construct_1.json");
+
   font = loadFont("assets\\Inconsolata\\Inconsolata.otf");
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
-  gameInfo = partyLoadShared("Game_Info", {currentID :0});
+  gameInfo = partyLoadShared("Game_Info", {currentID :0, planeConstrcuts:defaultPlanes});
   myShare = partyLoadMyShared();
   otherShares = partyLoadGuestShareds();
 }

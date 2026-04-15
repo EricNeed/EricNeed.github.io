@@ -59,7 +59,7 @@ class Draw3DStuff{
         if(chara.primary_parts === undefined){return;}
         strokeWeight(0.1);
         this.transformAndDraw3D(chara.primary_parts, 0, true);
-        let chara_part = plane_constructs[chara.primary_parts[11]];
+        let chara_part = gameInfo.planeConstrcuts[chara.primary_parts[11]];
         
         for(let p = 0; p < chara_part.length; p+=11){
             this.transformAndDraw3D(chara_part, p);
