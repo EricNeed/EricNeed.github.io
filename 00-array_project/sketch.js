@@ -12,19 +12,18 @@ let myShare;
 let otherShares;
 let gameInfo;
 let font;
+let loadTemp;
 
 function preload(){
   //planes
-  let hi = loadJSON("assets\\planes\\plane_construct_1.json");
-  console.log(hi);
-  //defaultPlanes[0] = defaultPlanes[0].plane;
+  defaultPlanes[0] = loadJSON("assets\\planes\\plane_construct_1.json");
 
   font = loadFont("assets\\Inconsolata\\Inconsolata.otf");
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
-  gameInfo = partyLoadShared("Game_Info", {currentID :0, planeConstrcuts:defaultPlanes});
+  gameInfo = partyLoadShared("Game_Info", {currentID :0, planeConstrcuts:[]});
   myShare = partyLoadMyShared();
   otherShares = partyLoadGuestShareds();
-}
+} 
 
 function setup() {
   myShare.ID = gameInfo.currentID;
@@ -37,7 +36,11 @@ function setup() {
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
 
-  //createIGButton(0, 0, 0.1, 0.1, 0.3);
+  //edit the finally fully loaded arrays to the files
+  for(const plane_array of defaultPlanes){
+    gameInfo.planeConstrcuts.push(plane_array.plane);
+  }
+  //createIGButton(0.5, 0.5, 0.5, 0.1, 1, "you are the host now, press \"]\" to use creator feature");
 }
 
 

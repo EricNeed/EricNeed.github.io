@@ -201,37 +201,3 @@ function createIGButton(x, y, dx, dy, text_size = 1, the_text = 67){//text size 
     buttons.push(new_button);
     return new_button;
 }
-
-function hi(){
-    for(const button of buttons){
-        if(!button.show){continue};
-        fill(button.pressed? button.activeColor:button.idleColor);
-        rect(button.x, button.y, button.dx, button.dy);
-    }
-    push();
-    textFont(font);
-    fill(128);
-    textSize(button.text_size);
-    translate(0, this.NEAR_DST+0.001, 0);
-    for(const button of buttons){
-        if(!button.show){continue};
-        text(button.text, button.x + button.dx/2, button.y + button.dy/2);
-    }
-    pop();
-
-
-
-    for(const button of buttons){
-        textFont(font);
-        //console.log(`${button.x} ${button.y} ${button.dx} ${button.dy}`);
-        if(!button.show){continue};
-        fill(button.pressed? button.activeColor:button.idleColor);
-        rect(button.x, button.y, button.dx, button.dy);
-        push();
-        translate(0, this.NEAR_DST+0.001, 0);
-        fill(128);
-        textSize(button.text_size);
-        text(button.text, button.x + button.dx/2, button.y + button.dy/2);
-        pop();
-    }
-}
