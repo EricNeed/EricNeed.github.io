@@ -21,7 +21,8 @@ class PlaneMaker{
             createIGButton(-0.49, -0.49, 0.05, 0.05, 0.4, "delete"),
             createIGButton(-0.43, -0.49, 0.05, 0.05, 0.4, "export"),
         ];
-        this.infoText = createIGButton(0, 0.3, 0, 0, 0.5, "hi");
+        this.infoText = createIGButton(-0.3, 0.35, 0.7, 0.06, 0.4, "hi");
+        this.infoText.idleColor = [0,0,0, 128];
 
         this.new_plane_index = plane_constructs.length;
         this.new_plane = plane_constructs[this.new_plane_index] = [];
@@ -35,6 +36,8 @@ class PlaneMaker{
     }
 
     tickEditorGUI(){
+        if(this.newPartHeadIndex === undefined){return;}
+
         let direction = 1; //1:forward -1:reverse
 
         this.distMultiplier = round(this.distMultiplier);
@@ -43,6 +46,8 @@ class PlaneMaker{
         for(let i = 0; i<this.editorButton.length; i++){
             let current_button = this.editorButton[i];
             if(!current_button.pressed){continue;}
+
+            if(this.new_plane[0] === undefined && i<12){continue;}//if not create a ship yet, you cannot edit
 
             switch(i){
             //move
@@ -73,7 +78,7 @@ class PlaneMaker{
                     }
                 break;
             //shapes
-                case 12:
+                case 12://rectangle
                     console.log("adding a cube");
                     this.newPartHeadIndex = this.new_plane.length;
                     this.new_plane[this.newPartHeadIndex] = 0;
@@ -85,32 +90,33 @@ class PlaneMaker{
                     this.new_plane[this.newPartHeadIndex+7] = 5;
                     this.radiusMode = false;
                 break;
-                case 13:
+                case 13://cone
                     console.log("adding a cylinder");
                     this.newPartHeadIndex = this.new_plane.length;
                     this.new_plane[this.newPartHeadIndex] = 1;
                     this.new_plane[this.newPartHeadIndex+1] = false;
                     this.fillInDefaultPlacement(this.newPartHeadIndex);
                     this.new_plane[this.newPartHeadIndex+2] = 10;
-                    this.new_plane[this.newPartHeadIndex+5] = 5;
-                    this.new_plane[this.newPartHeadIndex+6] = 5;
+                    this.new_plane[this.newPartHeadIndex+5] = 2;
+                    this.new_plane[this.newPartHeadIndex+6] = 3;
                     this.new_plane[this.newPartHeadIndex+7] = 4;
                     this.radiusMode = true;
                 break;
-                case 14:
+                case 14://cylinder
                     console.log("adding a cone");
                     this.newPartHeadIndex = this.new_plane.length;
                     this.new_plane[this.newPartHeadIndex] = 2;
                     this.new_plane[this.newPartHeadIndex+1] = false;
                     this.fillInDefaultPlacement(this.newPartHeadIndex);
                     this.new_plane[this.newPartHeadIndex+2] = 10;
-                    this.new_plane[this.newPartHeadIndex+5] = 5;
-                    this.new_plane[this.newPartHeadIndex+6] = 5;
+                    this.new_plane[this.newPartHeadIndex+5] = 2;
+                    this.new_plane[this.newPartHeadIndex+6] = 3;
                     this.new_plane[this.newPartHeadIndex+7] = 4;
                     this.radiusMode = true;
                 break;
                 case 15:
-                    
+                    this.new_plane.splice(this.newPartHeadIndex, 11);
+                    this.newPartHeadIndex -= 11;
                 break;
                 case 16:
                     saveJSON(this.new_plane, "plane construct");
@@ -122,7 +128,8 @@ class PlaneMaker{
             break;
         }
 
-        this.infoText = `shape: ${}, offset: [${}], rotation: [], size: []`
+        //display the text
+        this.infoText.text = `shape: ${this.new_plane[this.newPartHeadIndex]}, offset: [${this.new_plane[this.newPartHeadIndex+2]},${this.new_plane[this.newPartHeadIndex+3]},${this.new_plane[this.newPartHeadIndex+4]}], rotation: [${round(this.new_plane[this.newPartHeadIndex+8], 1)},${round(this.new_plane[this.newPartHeadIndex+9], 1)},${round(this.new_plane[this.newPartHeadIndex+10], 1)}], size: [${this.new_plane[this.newPartHeadIndex+5]},${this.new_plane[this.newPartHeadIndex+6]},${this.new_plane[this.newPartHeadIndex+7]}] \n Ctrl to speed up edit, crreate a shape to begin`;
 
         //reset this so it wont stuck on multiplied state
         this.distMultiplier = 1;

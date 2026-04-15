@@ -141,7 +141,7 @@ class UserUI{
             if(mouseUnitX < button.x || mouseUnitX > button.x+button.dx || mouseUnitY > button.y+button.dy || mouseUnitY < button.y){
                 continue;
             }
-            console.log(`button prressed`);
+            //console.log(`button prressed`);
             button.pressed = !button.pressed; //all button are default toggle, if you want push switch then you should deactivate it in another script
             break;
         }
