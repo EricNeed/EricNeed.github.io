@@ -11,16 +11,17 @@ class Walker{
     this.Y = y;
     this.diameter = 2;
     this.speed = 5;
-    this.color = "red";
+    this.color = color(random(0, 255), random(0, 255), random(0, 255));
   }
 
   display(){
     fill(this.color);
+    noStroke();
     circle(this.X, this.Y, this.diameter);
   }
 
   move(){
-    let choice = round(random(1, 4));
+    let choice = floor(random(1, 5));
     console.log(choice);
     switch(choice){
     case 1:
@@ -39,14 +40,22 @@ class Walker{
   }
 };
 
+let the_walkers = [];
 let harjot;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  harjot = new Walker(width/2, height/2);
 }
 
 function draw() {
-  harjot.move();
-  harjot.display();
+
+  for(let walker of the_walkers){
+    walker.move();
+    walker.display();
+  }
+}
+
+function mousePressed(){
+  let new_walker = new Walker(mouseX, mouseY);
+  the_walkers.push(new_walker);
 }

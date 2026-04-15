@@ -119,7 +119,7 @@ class PlaneMaker{
                     this.newPartHeadIndex -= 11;
                 break;
                 case 16:
-                    saveJSON(this.new_plane, "plane construct");
+                    saveJSON({plane: this.new_plane}, "plane construct");
                 break;
             }
 

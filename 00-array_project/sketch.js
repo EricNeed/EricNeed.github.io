@@ -15,7 +15,9 @@ let font;
 
 function preload(){
   //planes
-  defaultPlanes[0] = loadJSON("assets\\planes\\plane_construct_1.json");
+  let hi = loadJSON("assets\\planes\\plane_construct_1.json");
+  console.log(hi);
+  //defaultPlanes[0] = defaultPlanes[0].plane;
 
   font = loadFont("assets\\Inconsolata\\Inconsolata.otf");
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
