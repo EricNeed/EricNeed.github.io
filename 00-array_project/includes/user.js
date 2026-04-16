@@ -132,12 +132,36 @@ class User{
                 user_ui.enable_map = !user_ui.enable_map;
                 break;
             case 221://"]" key
-                if(!myShare.creatorEnabled && partyIsHost()){
+                if(!myShare.creatorEnabled){
                     console.log("creator mode enabled");
                     creatorMode = new PlaneMaker();
                     myShare.creatorEnabled = true;
                 }
                 break;
+            case 219://[ import
+                //let slot = gameInfo.planeConstruct.length;
+                if(!is_still_host){break;}
+                let imported_file = createFileInput(handleImportedJSON);
+                break;
+            default:
+                if(keyCode >= 48 && keyCode <= 57){//1-9 input
+                    let num_key = keyCode - 48;
+                    if(gameInfo.planeConstrcuts[num_key] !== undefined){
+                        myShare.chara.primary_parts[11] = num_key;
+                    }
+                }
         }
     }//https://www.toptal.com/developers/keycode
+}
+
+function handleImportedJSON(file){
+    let name_length = file.name.length;
+    if(file.name.substr(name_length - 4, name_length) === "json"){//check if the file end with json
+        console.log("importing the json file");
+        let slot = gameInfo.planeConstrcuts.length;
+        console.log(file.data.plane);
+        gameInfo.planeConstrcuts[slot] = file.data.plane;
+        infoButton.text = `imported plane at \nslot ${slot}` + sidbar_tip;
+    }
+
 }

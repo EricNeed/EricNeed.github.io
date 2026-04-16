@@ -9,7 +9,7 @@ class Character{
     constructor(primary_x, primary_y, primary_z, __type){
         this.primary_parts = [0, false, primary_x, primary_y, primary_z, 5, 5, 5, 0,0,0,0];//11:type
         this.moving_parts = [];
-        this.speeds = {left: 10, right: 10, forward: 10, backward: 10, up: 10, down: 10};
+        this.speeds = {left: 2, right: 2, forward: 5, backward: 2, up: 2, down: 2};
         this.x_sync_primary = false;//the plane tilt down when look down
         this.y_sync_primary = true;//the plane look at the direction pointing at
     }

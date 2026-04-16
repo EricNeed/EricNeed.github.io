@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 //i also need this to build all the planes in game
 //this class should be ticked in the draw GUI loop
 class PlaneMaker{
@@ -24,10 +25,8 @@ class PlaneMaker{
         this.infoText = createIGButton(-0.3, 0.35, 0.7, 0.06, 0.4, "hi");
         this.infoText.idleColor = [0,0,0, 128];
 
-        this.new_plane_index = gameInfo.planeConstrcuts.length;
-        this.new_plane = gameInfo.planeConstrcuts[this.new_plane_index] = [];
+        this.new_plane = [];
         myShare.chara.y_sync_primary = false;
-        myShare.chara.primary_parts[11] = this.new_plane_index;
 
         this.newPartHeadIndex = 0; //the begining index of current editing part of plane
         this.radiusMode = false;//whether button [10,11,12] is [sizeX, sizeY, sizeZ], or [radius, height, lod]
@@ -129,7 +128,7 @@ class PlaneMaker{
         }
 
         //display the text
-        this.infoText.text = `shape: ${this.new_plane[this.newPartHeadIndex]}, offset: [${this.new_plane[this.newPartHeadIndex+2]},${this.new_plane[this.newPartHeadIndex+3]},${this.new_plane[this.newPartHeadIndex+4]}], rotation: [${round(this.new_plane[this.newPartHeadIndex+8], 1)},${round(this.new_plane[this.newPartHeadIndex+9], 1)},${round(this.new_plane[this.newPartHeadIndex+10], 1)}], size: [${this.new_plane[this.newPartHeadIndex+5]},${this.new_plane[this.newPartHeadIndex+6]},${this.new_plane[this.newPartHeadIndex+7]}] \n Ctrl to speed up edit, crreate a shape to begin`;
+        this.infoText.text = `shape: ${this.new_plane[this.newPartHeadIndex]}, offset: [${this.new_plane[this.newPartHeadIndex+2]},${this.new_plane[this.newPartHeadIndex+3]},${this.new_plane[this.newPartHeadIndex+4]}], rotation: [${round(this.new_plane[this.newPartHeadIndex+8], 1)},${round(this.new_plane[this.newPartHeadIndex+9], 1)},${round(this.new_plane[this.newPartHeadIndex+10], 1)}], size: [${this.new_plane[this.newPartHeadIndex+5]},${this.new_plane[this.newPartHeadIndex+6]},${this.new_plane[this.newPartHeadIndex+7]}] \n Ctrl to speed up edit, Q to reverse direction, crreate a shape to begin`;
 
         //reset this so it wont stuck on multiplied state
         this.distMultiplier = 1;
@@ -138,6 +137,12 @@ class PlaneMaker{
     fillInDefaultPlacement(start_index){
         for(let i = 2;i<11; i++){
             this.new_plane[start_index+i] = 0;
+        }
+    }
+
+    turnOffEditorGUI(){
+        for(button of this.editorButton){
+            button.show = false;
         }
     }
 }

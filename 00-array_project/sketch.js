@@ -14,9 +14,16 @@ let gameInfo;
 let font;
 let loadTemp;
 
+let is_still_host = false;
+
+//info button:
+let infoButton;
+let sidbar_tip = "\n\nWASD/SHIFT/SPACE\n to move, 0-9 to \nswith plane (if \nhost imported \n any), 0 is default";
+
 function preload(){
   //planes
   defaultPlanes[0] = loadJSON("assets\\planes\\plane_construct_1.json");
+  defaultPlanes[1] = loadJSON("assets\\planes\\plane_construct_2.json");
 
   font = loadFont("assets\\Inconsolata\\Inconsolata.otf");
   partyConnect("wss://demoserver.p5party.org", "EricPlaneGame2026_3_29");
@@ -40,13 +47,27 @@ function setup() {
   for(const plane_array of defaultPlanes){
     gameInfo.planeConstrcuts.push(plane_array.plane);
   }
-  //createIGButton(0.5, 0.5, 0.5, 0.1, 1, "you are the host now, press \"]\" to use creator feature");
+
+  //button that display some game info
+  infoButton = createIGButton(-0.49, -0.15, 0.15, 0.3, 0.08);
+  infoButton.idleColor = [0,0,0, 100];
+  infoButton.text = sidbar_tip;
 }
 
 
 function draw() {
   background(220);
   
+  if(partyIsHost()){
+    if(!is_still_host){
+      infoButton.text = "you are the host, \npress \"]\" to use \nplane maker, press\n \"[\" to import" + sidbar_tip;
+      is_still_host = true;
+    }
+    
+  }else{
+    is_still_host = false;
+  }
+
   draw_3d.draw_3d();
 
   //user logic:
