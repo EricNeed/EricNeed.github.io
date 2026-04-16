@@ -112,6 +112,7 @@ class Draw3DStuff{
         this.drawSkyBox();
         this.drawTerrain();
         this.renderAllCharacters();
+        bulletThing.tickBullet();
     }
 }
 

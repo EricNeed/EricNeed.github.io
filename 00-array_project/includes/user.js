@@ -4,7 +4,7 @@ class User{
         this.sensitivity = 0.005;
         this.zoom = 100;
         this.camera_angle = {h: 0, v: 0, x: 0, y: 0, z: 0};
-
+        this.cameraFOV = 2 * atan(height / 1600);
     }
     
     //move the plane to each direction
@@ -99,6 +99,9 @@ class User{
         if(mouseButton === LEFT){
             user_ui.buttonPressed();
             //console.log("left clicked");
+            let primPart = myShare.chara.primary_parts;
+            bulletThing.createBullet(primPart[2],primPart[3],primPart[4],primPart[10],primPart[9],primPart[8], 100);
+            console.log("created bullet");
         }
         if(mouseButton === RIGHT){
             this.pointerLockOn = true;
@@ -106,6 +109,7 @@ class User{
         }
     }
 
+    //move the character
     moveCharacter(v_add, h_add, speed){
         const player = myShare.chara;
         let new_coord = findPointAroundPoint(player.primary_parts[2], player.primary_parts[3], player.primary_parts[4], player.primary_parts[9]+v_add, player.primary_parts[8]+h_add, speed);
