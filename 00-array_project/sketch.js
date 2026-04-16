@@ -13,6 +13,7 @@ let otherShares;
 let gameInfo;
 let font;
 let loadTemp;
+let bulletThing;
 
 let is_still_host = false;
 
@@ -42,6 +43,7 @@ function setup() {
   user_logic = new User();
   user_ui = new UserUI();
   draw_3d = new Draw3DStuff();
+  bulletThing = new Bullet();
 
   //edit the finally fully loaded arrays to the files
   for(const plane_array of defaultPlanes){

@@ -16,6 +16,7 @@ class Particle{
     this.alpha = random(0, 255);
     this.dx = random(-5, 5);
     this.dy = random(-5, 5);
+    this.index = all_particles.length;
   }
 
   display(){
@@ -28,6 +29,10 @@ class Particle{
     this.X += this.dx;
     this.Y += this.dy;
     this.alpha--;
+
+    if(this.alpha < 0){
+      all_particles.splice(this.index, 1);
+    }
   }
 }
 
@@ -43,11 +48,13 @@ function draw() {
     particle.update();
     particle.display();
   }
+
+  mousePressed();
 }
 
-const PARTICLE_PER_CLICK = 100;
+const PARTICLE_PER_CLICK = 500;
 function mousePressed(){
-  console.log("firework");
+  //console.log("firework");
   for(let i = PARTICLE_PER_CLICK; i>0; i--){
     all_particles.push(new Particle(mouseX, mouseY));
   }
