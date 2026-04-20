@@ -12,6 +12,9 @@
 - [grid obsticle](10-grid_obsticle)
 - [OOPwalker](12-OOPwalker)
 - [firework](13-firework)
+- [ball collision](14-ballCollide)
+- [connected node](15-connected_nodes)
+
 ## Assignment
 - add assignment here
 - [Arrays and Object Notation](00-array_project)
